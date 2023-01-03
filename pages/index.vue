@@ -7,8 +7,8 @@ import AboutTemplate, {
 } from '~/components/templates/AboutTemplate.vue'
 
 const getStaticImageUrl = (name:any) => {
-        return new URL(`../static/${name}`, import.meta.url).href
-    }
+  return new URL(`../static/${name}`, import.meta.url).href
+}
 
 const data: AboutTemplateData = {
   pageTitle: 'Shun Yamazaki (sYamaz)',
@@ -40,7 +40,7 @@ const data: AboutTemplateData = {
   webTitle: 'Web',
   webLinks: [
     {
-      icon: "mdi-twitter",
+      icon: 'mdi-twitter',
       name: 'Twitter(@ShunYamazaki5)',
       url: 'https://twitter.com/ShunYamazaki5'
     },

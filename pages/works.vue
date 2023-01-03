@@ -8,8 +8,8 @@ import CardListViewTemplate, {
 } from '../components/templates/CardListViewTemplate.vue'
 
 const getStaticImageUrl = (name:any) => {
-        return new URL(`../static/${name}`, import.meta.url).href
-    }
+  return new URL(`../static/${name}`, import.meta.url).href
+}
 
 const data: CardListViewTemplateData = {
   pageTitle: 'Works',

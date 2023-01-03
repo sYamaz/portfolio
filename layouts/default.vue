@@ -4,22 +4,23 @@
       <v-list>
         <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-list-item-title>
+              {{ item.title }}
+            </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar style="backdrop-filter: blur(10px);" :color="isDark() ? '#FFFFFF00' : '#FFFFFF10'">
-      
-      <v-toolbar-title v-text="title" />
+      <v-toolbar-title>
+        {{ title }}
+      </v-toolbar-title>
       <v-app-bar-nav-icon @click.stop="changeTheme(isDark() ? 'light' : 'dark')">
-        <v-icon v-if="isDark()" icon="mdi-white-balance-sunny">
-        </v-icon>
-        <v-icon v-else icon="mdi-weather-night">
-        </v-icon>
+        <v-icon v-if="isDark()" icon="mdi-white-balance-sunny" />
+        <v-icon v-else icon="mdi-weather-night" />
       </v-app-bar-nav-icon>
-      <v-app-bar-nav-icon  :href="sourceUrl">
-        <v-icon icon="mdi-github"></v-icon>
+      <v-app-bar-nav-icon :href="sourceUrl">
+        <v-icon icon="mdi-github" />
       </v-app-bar-nav-icon>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
     </v-app-bar>
@@ -52,14 +53,14 @@ const items = [
     to: '/posts'
   }
 ]
-let theme = ref('dark')
-let drawer = ref(false)
+const theme = ref('dark')
+const drawer = ref(false)
 const isDark = () => theme.value === 'dark'
-const changeTheme = (mode: Mode) => theme.value = mode
+const changeTheme = (mode: Mode) => { theme.value = mode }
 </script>
 <script lang="ts">
 type Mode = 'dark' | 'light'
 export default defineComponent({
-  name: "DefaultLayout",
+  name: 'DefaultLayout'
 })
 </script>
