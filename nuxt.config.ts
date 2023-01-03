@@ -5,8 +5,8 @@ export default defineNuxtConfig({
   app: {
     baseURL,
     head: {
-      titleTemplate: '%s - website-nuxt',
-      title: 'website-nuxt',
+      titleTemplate: '%s - portfolio',
+      title: 'portfolio',
       htmlAttrs: {
         lang: 'en'
       },

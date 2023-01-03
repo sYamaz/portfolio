@@ -38,7 +38,7 @@
 </template>
 <script lang="ts" setup>
 const title = 'Shun Yamazaki'
-const sourceUrl = 'https://github.com/sYamaz/website-nuxt'
+const sourceUrl = 'https://github.com/sYamaz/portfolio'
 const items = [
   {
     title: 'About',
