@@ -53,9 +53,9 @@ jobs:
         run: yarn
       - name: Build
         run: yarn generate
-      - name: Deploy (puth dist dir to gh-pages branch)
+      - name: Deploy (puth output/public dir to gh-pages branch)
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./output/public
           publish_branch: gh-pages
