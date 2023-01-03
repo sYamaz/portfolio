@@ -1,4 +1,4 @@
-const baseURL = '/website-nuxt/'
+const baseURL = '/portfolio/'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
