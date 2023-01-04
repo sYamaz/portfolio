@@ -1,6 +1,8 @@
 <template>
   <ContentSection title="Posts">
-    <OGPCard v-for="post in prop.data.posts" :key="post.id" class="ma-4" :data="post" />
+    <v-lazy v-for="post in prop.data.posts" :key="post.id">
+      <OGPCard class="ma-4" :data="post" />
+    </v-lazy>
   </ContentSection>
 </template>
 
