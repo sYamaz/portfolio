@@ -1,42 +1,35 @@
-# Nuxt 3 Minimal Starter
+# portfolio
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## 開発環境
 
-## Setup
+- vscode
+  - 拡張機能： Dev Containers(`ms-vscode-remote.remote-containers`)
+- docker
 
-Make sure to install the dependencies:
+## debug
 
-```bash
-# yarn
+リポジトリをクローンします
+
+```sh
+git clone {url}
+```
+
+vscode上でコマンドパレットを表示します（`Cmd(ctl) + Shift + P`）し`Dev Containers: Reopen in Container`
+（またはvscodeのウィンドウ左下の><アイコンをクリックして`Reopen in Container`）
+を実行します
+
+node_modulesのインストールをします
+
+```
+yarn
+または
 yarn install
-
-# npm
-npm install
-
-# pnpm
-pnpm install --shamefully-hoist
 ```
 
-## Development Server
+デバッグ実行します
 
-Start the development server on http://localhost:3000
-
-```bash
-npm run dev
+```
+yarn dev
 ```
 
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+ブラウザで`http://localhost:3000`にアクセスしてください
