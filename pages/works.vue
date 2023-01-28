@@ -11,6 +11,8 @@ const getStaticImageUrl = (name:any) => {
   return new URL(`../static/${name}`, import.meta.url).href
 }
 
+const config = useRuntimeConfig()
+
 const data: CardListViewTemplateData = {
   pageTitle: 'Works',
   works: [
@@ -30,7 +32,7 @@ const data: CardListViewTemplateData = {
       text: 'This website.',
       platform: ['Web'],
       status: 'Released',
-      url: '/',
+      url: config.app.baseURL,
       outerurl: '',
       buttonName: 'Top page'
     }
