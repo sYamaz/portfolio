@@ -1,5 +1,5 @@
 <template>
-  <v-chip class="capitalization_none" disabled small>
+  <v-chip class="capitalization_none" disabled small rounded>
     {{ prop.name }}
   </v-chip>
 </template>
