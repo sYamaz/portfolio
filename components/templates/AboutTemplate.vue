@@ -13,7 +13,7 @@
     </ContentSection>
     <!--Hobby-->
     <ContentSection :title="prop.data.hobbyTitle">
-      <JoinedText :text-array="prop.data.hobbyItems" />
+      <JoinedText :text-array="prop.data.hobbyItems" class="ml-4" />
     </ContentSection>
     <!--Web-->
     <ContentSection :title="prop.data.webTitle">
