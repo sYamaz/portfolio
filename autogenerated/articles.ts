@@ -1,4 +1,352 @@
-export const articles = [{rendered_body: `<p data-sourcepos="1:1-1:233">読み上げてくれればチャット欄見なくていいよねってことで、Youtube APIからライブ配信のコメントをポーリングしつつ、取得したコメントを読み上げさせようとTryしました。</p>
+export const articles = [{rendered_body: `<p data-sourcepos="1:1-2:64">github.com/labstack/echoのロギングについての備忘録です.<br>
+echoのログを活用していきたい...と考えてます。</p>
+<h1 data-sourcepos="4:1-4:8">
+<span id="前提" class="fragment"></span><a href="#%E5%89%8D%E6%8F%90"><i class="fa fa-link"></i></a>前提</h1>
+<ul data-sourcepos="6:1-10:0">
+<li data-sourcepos="6:1-6:9">go 1.19</li>
+<li data-sourcepos="7:1-7:14">echo v4.10.0</li>
+<li data-sourcepos="8:1-10:0">echoのErrorHandlerはDefaultHTTPErrorHandlerを使用
+<ul data-sourcepos="9:5-10:0">
+<li data-sourcepos="9:5-10:0"><a href="https://github.com/labstack/echo/blob/v4.10.0/echo.go#L389-L429" class="autolink" rel="nofollow noopener" target="_blank">https://github.com/labstack/echo/blob/v4.10.0/echo.go#L389-L429</a></li>
+</ul>
+</li>
+</ul>
+<h1 data-sourcepos="11:1-11:44">
+<span id="はじめに正常応答させてみる" class="fragment"></span><a href="#%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB%E6%AD%A3%E5%B8%B8%E5%BF%9C%E7%AD%94%E3%81%95%E3%81%9B%E3%81%A6%E3%81%BF%E3%82%8B"><i class="fa fa-link"></i></a>はじめに、正常応答させてみる</h1>
+<p data-sourcepos="13:1-13:74">echoの<code>middleware.Logger</code>をカスタマイズせずに使用します。</p>
+<div class="code-frame" data-lang="go" data-sourcepos="15:1-26:3"><div class="highlight"><pre><code><span class="c">// ~省略</span>
+
+<span class="n">e</span> <span class="o">:=</span> <span class="n">echo</span><span class="o">.</span><span class="n">New</span><span class="p">()</span>
+<span class="n">e</span><span class="o">.</span><span class="n">Use</span><span class="p">(</span><span class="n">middleware</span><span class="o">.</span><span class="n">Logger</span><span class="p">())</span>
+
+<span class="c">// ~省略</span>
+
+<span class="n">e</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="s">"/"</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">ctx</span> <span class="n">echo</span><span class="o">.</span><span class="n">Context</span><span class="p">)</span> <span class="kt">error</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
+  <span class="k">return</span> <span class="n">ctx</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusOK</span><span class="p">,</span> <span class="s">"Hello world!"</span><span class="p">)</span>
+<span class="p">${"$"}{"}"})</span>
+</code></pre></div></div>
+<p data-sourcepos="28:1-28:25">curlで呼び出します</p>
+<div class="code-frame" data-lang="sh" data-sourcepos="29:1-32:3"><div class="highlight"><pre><code><span class="c">#localhost, port=8888で実行しているとき</span>
+curl http://localhost:8888/
+</code></pre></div></div>
+<p data-sourcepos="34:1-34:13">logの内容</p>
+<div class="code-frame" data-lang="json" data-sourcepos="35:1-37:3"><div class="highlight"><pre><code><span class="p">${"$"}{"{"${"$"}{"}"}</span><span class="nl">"time"</span><span class="p">:</span><span class="s2">"2023-01-22T03:52:21.307000008Z"</span><span class="p">,</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"remote_ip"</span><span class="p">:</span><span class="s2">"/*remote ip*/"</span><span class="p">,</span><span class="nl">"host"</span><span class="p">:</span><span class="s2">"localhost:8888"</span><span class="p">,</span><span class="nl">"method"</span><span class="p">:</span><span class="s2">"GET"</span><span class="p">,</span><span class="nl">"uri"</span><span class="p">:</span><span class="s2">"/"</span><span class="p">,</span><span class="nl">"user_agent"</span><span class="p">:</span><span class="s2">"curl/7.84.0"</span><span class="p">,</span><span class="nl">"status"</span><span class="p">:</span><span class="mi">200</span><span class="p">,</span><span class="nl">"error"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"latency"</span><span class="p">:</span><span class="mi">134542</span><span class="p">,</span><span class="nl">"latency_human"</span><span class="p">:</span><span class="s2">"134.542µs"</span><span class="p">,</span><span class="nl">"bytes_in"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nl">"bytes_out"</span><span class="p">:</span><span class="mi">12</span><span class="p">${"$"}{"}"}</span><span class="w">
+</span></code></pre></div></div>
+<p data-sourcepos="39:1-39:61">正常な振る舞いをしているので<code>error</code>は空です</p>
+<h1 data-sourcepos="41:1-41:29">
+<span id="エラー応答について" class="fragment"></span><a href="#%E3%82%A8%E3%83%A9%E3%83%BC%E5%BF%9C%E7%AD%94%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6"><i class="fa fa-link"></i></a>エラー応答について</h1>
+<p data-sourcepos="43:1-43:132">正常時のログを確認したので、エラー応答のさせ方によるログやレスポンスの違いを見ていきます</p>
+<h2 data-sourcepos="45:1-45:38">
+<span id="1-echohttperrorを返してみる" class="fragment"></span><a href="#1-echohttperror%E3%82%92%E8%BF%94%E3%81%97%E3%81%A6%E3%81%BF%E3%82%8B"><i class="fa fa-link"></i></a>1. echo.HTTPErrorを返してみる</h2>
+<div class="code-frame" data-lang="go" data-sourcepos="46:1-51:3"><div class="highlight"><pre><code><span class="n">e</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="s">"/"</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">ctx</span> <span class="n">echo</span><span class="o">.</span><span class="n">Context</span><span class="p">)</span> <span class="kt">error</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
+  <span class="c">// return ctx.String(http.StatusOK, "Hello world!")</span>
+  <span class="k">return</span> <span class="o">&amp;</span><span class="n">echo</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">${"$"}{"{"${"$"}{"}"}</span><span class="n">Code</span><span class="o">:</span> <span class="n">http</span><span class="o">.</span><span class="n">StatusNotFound</span><span class="p">,</span> <span class="n">Message</span><span class="o">:</span> <span class="s">"エラーメッセージ"</span><span class="p">,</span> <span class="n">Internal</span><span class="o">:</span> <span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s">"エラー内容"</span><span class="p">)${"$"}{"}"}</span>
+<span class="p">${"$"}{"}"})</span>
+</code></pre></div></div>
+<p data-sourcepos="53:1-53:18">logの内容です</p>
+<div class="code-frame" data-lang="json" data-sourcepos="54:1-56:3"><div class="highlight"><pre><code><span class="p">${"$"}{"{"${"$"}{"}"}</span><span class="nl">"time"</span><span class="p">:</span><span class="s2">"2023-01-22T04:01:40.613879378Z"</span><span class="p">,</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"remote_ip"</span><span class="p">:</span><span class="s2">"/*remote ip*/"</span><span class="p">,</span><span class="nl">"host"</span><span class="p">:</span><span class="s2">"localhost:8888"</span><span class="p">,</span><span class="nl">"method"</span><span class="p">:</span><span class="s2">"GET"</span><span class="p">,</span><span class="nl">"uri"</span><span class="p">:</span><span class="s2">"/"</span><span class="p">,</span><span class="nl">"user_agent"</span><span class="p">:</span><span class="s2">"curl/7.84.0"</span><span class="p">,</span><span class="nl">"status"</span><span class="p">:</span><span class="mi">404</span><span class="p">,</span><span class="nl">"error"</span><span class="p">:</span><span class="s2">"code=404, message=エラーメッセージ, internal=エラー内容"</span><span class="p">,</span><span class="nl">"latency"</span><span class="p">:</span><span class="mi">84958</span><span class="p">,</span><span class="nl">"latency_human"</span><span class="p">:</span><span class="s2">"84.958µs"</span><span class="p">,</span><span class="nl">"bytes_in"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nl">"bytes_out"</span><span class="p">:</span><span class="mi">39</span><span class="p">${"$"}{"}"}</span><span class="w">
+</span></code></pre></div></div>
+<p data-sourcepos="58:1-58:115"><code>error</code>の値として<code>echo.HTTPError</code>で定義した内容（Code, message, internal）が出力されてます。</p>
+<p data-sourcepos="60:1-60:44">この時のhttpレスポンスのBodyです</p>
+<div class="code-frame" data-lang="json" data-sourcepos="61:1-63:3"><div class="highlight"><pre><code><span class="p">${"$"}{"{"${"$"}{"}"}</span><span class="nl">"message"</span><span class="p">:</span><span class="s2">"エラーメッセージ"</span><span class="p">${"$"}{"}"}</span><span class="w">
+</span></code></pre></div></div>
+<h3 data-sourcepos="65:1-65:109">
+<span id="補足echohttperrorを返すけどレスポンスのbodyを自前のstructで定義したい場合" class="fragment"></span><a href="#%E8%A3%9C%E8%B6%B3echohttperror%E3%82%92%E8%BF%94%E3%81%99%E3%81%91%E3%81%A9%E3%83%AC%E3%82%B9%E3%83%9D%E3%83%B3%E3%82%B9%E3%81%AEbody%E3%82%92%E8%87%AA%E5%89%8D%E3%81%AEstruct%E3%81%A7%E5%AE%9A%E7%BE%A9%E3%81%97%E3%81%9F%E3%81%84%E5%A0%B4%E5%90%88"><i class="fa fa-link"></i></a>（補足）echo.HTTPErrorを返すけどレスポンスのBodyを自前のstructで定義したい場合</h3>
+<p data-sourcepos="67:1-67:238">レスポンスに含まれるのがmessageだけでは物足りないという場合、<code>echo.HTTPError</code>のMessageに文字列ではなく構造体をセットすることでレスポンスBodyの内容を変えることができます。</p>
+<div class="code-frame" data-lang="go" data-sourcepos="69:1-83:3"><div class="highlight"><pre><code><span class="n">e</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="s">"/"</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">ctx</span> <span class="n">echo</span><span class="o">.</span><span class="n">Context</span><span class="p">)</span> <span class="kt">error</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
+	<span class="c">// return ctx.String(http.StatusOK, "Hello world!")</span>
+    <span class="c">// return &amp;echo.HTTPError${"$"}{"{"${"$"}{"}"}Code: http.StatusNotFound, Message: "エラーメッセージ", Internal: errors.New("エラー内容")${"$"}{"}"}</span>
+
+	<span class="n">msgObj</span> <span class="o">:=</span> <span class="k">struct</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
+		<span class="n">Prop1</span> <span class="kt">int</span>
+		<span class="n">Prop2</span> <span class="kt">string</span>
+	<span class="p">${"$"}{"}"}${"$"}{"{"${"$"}{"}"}</span>
+		<span class="n">Prop1</span><span class="o">:</span> <span class="m">100</span><span class="p">,</span>
+		<span class="n">Prop2</span><span class="o">:</span> <span class="s">"AAAAA"</span><span class="p">,</span>
+	<span class="p">${"$"}{"}"}</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="n">echo</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">${"$"}{"{"${"$"}{"}"}</span><span class="n">Code</span><span class="o">:</span> <span class="n">http</span><span class="o">.</span><span class="n">StatusNotFound</span><span class="p">,</span> <span class="n">Message</span><span class="o">:</span> <span class="n">msgObj</span><span class="p">,</span> <span class="n">Internal</span><span class="o">:</span> <span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s">"エラー内容"</span><span class="p">)${"$"}{"}"}</span>
+<span class="p">${"$"}{"}"})</span>
+</code></pre></div></div>
+<p data-sourcepos="85:1-85:18">logの内容です</p>
+<div class="code-frame" data-lang="json" data-sourcepos="86:1-88:3"><div class="highlight"><pre><code><span class="p">${"$"}{"{"${"$"}{"}"}</span><span class="nl">"time"</span><span class="p">:</span><span class="s2">"2023-01-22T04:05:37.928444793Z"</span><span class="p">,</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"remote_ip"</span><span class="p">:</span><span class="s2">"/*remote ip*/"</span><span class="p">,</span><span class="nl">"host"</span><span class="p">:</span><span class="s2">"localhost:8888"</span><span class="p">,</span><span class="nl">"method"</span><span class="p">:</span><span class="s2">"GET"</span><span class="p">,</span><span class="nl">"uri"</span><span class="p">:</span><span class="s2">"/"</span><span class="p">,</span><span class="nl">"user_agent"</span><span class="p">:</span><span class="s2">"curl/7.84.0"</span><span class="p">,</span><span class="nl">"status"</span><span class="p">:</span><span class="mi">404</span><span class="p">,</span><span class="nl">"error"</span><span class="p">:</span><span class="s2">"code=404, message=${"$"}{"{"${"$"}{"}"}100 AAAAA${"$"}{"}"}, internal=エラー内容"</span><span class="p">,</span><span class="nl">"latency"</span><span class="p">:</span><span class="mi">3021208</span><span class="p">,</span><span class="nl">"latency_human"</span><span class="p">:</span><span class="s2">"3.021208ms"</span><span class="p">,</span><span class="nl">"bytes_in"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nl">"bytes_out"</span><span class="p">:</span><span class="mi">30</span><span class="p">${"$"}{"}"}</span><span class="w">
+</span></code></pre></div></div>
+<p data-sourcepos="90:1-90:92"><code>error</code>のmessage部分が構造体に置き換わっていることが確認できます。</p>
+<p data-sourcepos="92:1-92:27">httpレスポンスのBody</p>
+<div class="code-frame" data-lang="json" data-sourcepos="94:1-96:3"><div class="highlight"><pre><code><span class="p">${"$"}{"{"${"$"}{"}"}</span><span class="nl">"Prop1"</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span><span class="nl">"Prop2"</span><span class="p">:</span><span class="s2">"AAAAA"</span><span class="p">${"$"}{"}"}</span><span class="w">
+</span></code></pre></div></div>
+<p data-sourcepos="98:1-98:330">狙い通り、構造体をjson化して返してくれています。今回はProp1/Prop2といった形でレスポンスをさせましたが、<code>${"$"}{"{"${"$"}{"}"}"error_code":"~", "message":"~~"${"$"}{"}"}</code>など、レスポンスBodyに<code>message</code>だけでなく、サービス固有のエラーIDなどを付け加えたい場合に使えそうです。</p>
+<h2 data-sourcepos="100:1-100:41">
+<span id="2-errorをそのまま返してみる" class="fragment"></span><a href="#2-error%E3%82%92%E3%81%9D%E3%81%AE%E3%81%BE%E3%81%BE%E8%BF%94%E3%81%97%E3%81%A6%E3%81%BF%E3%82%8B"><i class="fa fa-link"></i></a>2. errorをそのまま返してみる</h2>
+<div class="code-frame" data-lang="go" data-sourcepos="102:1-117:3"><div class="highlight"><pre><code><span class="k">func</span> <span class="n">e</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="s">"/"</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">ctx</span> <span class="n">echo</span><span class="o">.</span><span class="n">Context</span><span class="p">)</span> <span class="kt">error</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
+	<span class="c">// return ctx.String(http.StatusOK, "Hello world!")</span>
+	<span class="c">// return &amp;echo.HTTPError${"$"}{"{"${"$"}{"}"}Code: http.StatusNotFound, Message: "エラーメッセージ", Internal: errors.New("エラー内容")${"$"}{"}"}</span>
+	<span class="c">// msgObj := struct ${"$"}{"{"${"$"}{"}"}</span>
+	<span class="c">// 	Prop1 int</span>
+	<span class="c">// 	Prop2 string</span>
+	<span class="c">// ${"$"}{"}"}${"$"}{"{"${"$"}{"}"}</span>
+	<span class="c">// 	Prop1: 100,</span>
+	<span class="c">// 	Prop2: "AAAAA",</span>
+	<span class="c">// ${"$"}{"}"}</span>
+	<span class="c">// return &amp;echo.HTTPError${"$"}{"{"${"$"}{"}"}Code: http.StatusNotFound, Message: msgObj, Internal: errors.New("エラー内容")${"$"}{"}"}</span>
+
+	<span class="k">return</span> <span class="n">errors</span><span class="o">.</span><span class="n">New</span><span class="p">(</span><span class="s">"エラー内容"</span><span class="p">)</span>
+<span class="p">${"$"}{"}"})</span>
+</code></pre></div></div>
+<p data-sourcepos="119:1-119:18">logの内容です</p>
+<div class="code-frame" data-lang="json" data-sourcepos="120:1-122:3"><div class="highlight"><pre><code><span class="p">${"$"}{"{"${"$"}{"}"}</span><span class="nl">"time"</span><span class="p">:</span><span class="s2">"2023-01-22T04:13:47.412619673Z"</span><span class="p">,</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"remote_ip"</span><span class="p">:</span><span class="s2">"/*remote ip*/"</span><span class="p">,</span><span class="nl">"host"</span><span class="p">:</span><span class="s2">"localhost:8888"</span><span class="p">,</span><span class="nl">"method"</span><span class="p">:</span><span class="s2">"GET"</span><span class="p">,</span><span class="nl">"uri"</span><span class="p">:</span><span class="s2">"/"</span><span class="p">,</span><span class="nl">"user_agent"</span><span class="p">:</span><span class="s2">"curl/7.84.0"</span><span class="p">,</span><span class="nl">"status"</span><span class="p">:</span><span class="mi">500</span><span class="p">,</span><span class="nl">"error"</span><span class="p">:</span><span class="s2">"エラー内容"</span><span class="p">,</span><span class="nl">"latency"</span><span class="p">:</span><span class="mi">832958</span><span class="p">,</span><span class="nl">"latency_human"</span><span class="p">:</span><span class="s2">"832.958µs"</span><span class="p">,</span><span class="nl">"bytes_in"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nl">"bytes_out"</span><span class="p">:</span><span class="mi">36</span><span class="p">${"$"}{"}"}</span><span class="w">
+</span></code></pre></div></div>
+<p data-sourcepos="123:1-123:72"><code>error</code>の値には<code>errors.New()</code>した内容が出力されています</p>
+<p data-sourcepos="126:1-126:32">httpレスポンスのBodyです</p>
+<div class="code-frame" data-lang="json" data-sourcepos="127:1-129:3"><div class="highlight"><pre><code><span class="p">${"$"}{"{"${"$"}{"}"}</span><span class="nl">"message"</span><span class="p">:</span><span class="s2">"Internal Server Error"</span><span class="p">${"$"}{"}"}</span><span class="w">
+</span></code></pre></div></div>
+<p data-sourcepos="131:1-131:137">InternalServerError（StatusCode=500)固定なので400, 401, 404など使い分けをしたい場合は要求を満たせないです。</p>
+<h2 data-sourcepos="133:1-133:70">
+<span id="3-正常な挙動を装ってinternalservererrorを返してみる" class="fragment"></span><a href="#3-%E6%AD%A3%E5%B8%B8%E3%81%AA%E6%8C%99%E5%8B%95%E3%82%92%E8%A3%85%E3%81%A3%E3%81%A6internalservererror%E3%82%92%E8%BF%94%E3%81%97%E3%81%A6%E3%81%BF%E3%82%8B"><i class="fa fa-link"></i></a>3. 正常な挙動を装ってInternalServerErrorを返してみる</h2>
+<div class="code-frame" data-lang="go" data-sourcepos="135:1-159:3"><div class="highlight"><pre><code><span class="k">func</span> <span class="n">e</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="s">"/"</span><span class="p">,</span> <span class="k">func</span><span class="p">(</span><span class="n">ctx</span> <span class="n">echo</span><span class="o">.</span><span class="n">Context</span><span class="p">)</span> <span class="kt">error</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
+	<span class="c">// return ctx.String(http.StatusOK, "Hello world!")</span>
+	<span class="c">// return &amp;echo.HTTPError${"$"}{"{"${"$"}{"}"}Code: http.StatusNotFound, Message: "エラーメッセージ", Internal: errors.New("エラー内容")${"$"}{"}"}</span>
+	<span class="c">// msgObj := struct ${"$"}{"{"${"$"}{"}"}</span>
+	<span class="c">// 	Prop1 int</span>
+	<span class="c">// 	Prop2 string</span>
+	<span class="c">// ${"$"}{"}"}${"$"}{"{"${"$"}{"}"}</span>
+	<span class="c">// 	Prop1: 100,</span>
+	<span class="c">// 	Prop2: "AAAAA",</span>
+	<span class="c">// ${"$"}{"}"}</span>
+	<span class="c">// return &amp;echo.HTTPError${"$"}{"{"${"$"}{"}"}Code: http.StatusNotFound, Message: msgObj, Internal: errors.New("エラー内容")${"$"}{"}"}</span>
+
+	<span class="c">// return errors.New("エラー内容")</span>
+
+	<span class="n">msgObj</span> <span class="o">:=</span> <span class="k">struct</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
+		<span class="n">Prop1</span> <span class="kt">int</span>
+		<span class="n">Prop2</span> <span class="kt">string</span>
+	<span class="p">${"$"}{"}"}${"$"}{"{"${"$"}{"}"}</span>
+		<span class="n">Prop1</span><span class="o">:</span> <span class="m">100</span><span class="p">,</span>
+		<span class="n">Prop2</span><span class="o">:</span> <span class="s">"AAAAA"</span><span class="p">,</span>
+	<span class="p">${"$"}{"}"}</span>
+	<span class="k">return</span> <span class="n">ctx</span><span class="o">.</span><span class="n">JSON</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">StatusInternalServerError</span><span class="p">,</span> <span class="n">msgObj</span><span class="p">)</span>
+<span class="p">${"$"}{"}"})</span>
+</code></pre></div></div>
+<p data-sourcepos="161:1-161:18">logの内容です</p>
+<div class="code-frame" data-lang="json" data-sourcepos="162:1-164:3"><div class="highlight"><pre><code><span class="p">${"$"}{"{"${"$"}{"}"}</span><span class="nl">"time"</span><span class="p">:</span><span class="s2">"2023-01-22T04:30:00.244131346Z"</span><span class="p">,</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"remote_ip"</span><span class="p">:</span><span class="s2">"/*remote ip*/"</span><span class="p">,</span><span class="nl">"host"</span><span class="p">:</span><span class="s2">"localhost:8888"</span><span class="p">,</span><span class="nl">"method"</span><span class="p">:</span><span class="s2">"GET"</span><span class="p">,</span><span class="nl">"uri"</span><span class="p">:</span><span class="s2">"/"</span><span class="p">,</span><span class="nl">"user_agent"</span><span class="p">:</span><span class="s2">"curl/7.84.0"</span><span class="p">,</span><span class="nl">"status"</span><span class="p">:</span><span class="mi">500</span><span class="p">,</span><span class="nl">"error"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"latency"</span><span class="p">:</span><span class="mi">1925000</span><span class="p">,</span><span class="nl">"latency_human"</span><span class="p">:</span><span class="s2">"1.925ms"</span><span class="p">,</span><span class="nl">"bytes_in"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nl">"bytes_out"</span><span class="p">:</span><span class="mi">30</span><span class="p">${"$"}{"}"}</span><span class="w">
+</span></code></pre></div></div>
+<p data-sourcepos="166:1-166:19"><code>error</code>の値は空</p>
+<p data-sourcepos="168:1-168:32">httpレスポンスのBodyです</p>
+<div class="code-frame" data-lang="json" data-sourcepos="169:1-171:3"><div class="highlight"><pre><code><span class="p">${"$"}{"{"${"$"}{"}"}</span><span class="nl">"Prop1"</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span><span class="nl">"Prop2"</span><span class="p">:</span><span class="s2">"AAAAA"</span><span class="p">${"$"}{"}"}</span><span class="w">
+</span></code></pre></div></div>
+<h1 data-sourcepos="173:1-173:11">
+<span id="まとめ" class="fragment"></span><a href="#%E3%81%BE%E3%81%A8%E3%82%81"><i class="fa fa-link"></i></a>まとめ</h1>
+<p data-sourcepos="175:1-175:77">DefaultHTTPErrorHandlerを使う前提でのエラー時のログについて</p>
+<ul data-sourcepos="177:1-180:0">
+<li data-sourcepos="177:1-177:33">
+<code>echo.HTTPError</code>を返す場合</li>
+<li data-sourcepos="178:1-178:24">
+<code>error</code>を返す場合</li>
+<li data-sourcepos="179:1-180:0">
+<code>ctx.JSON()</code>で返す場合</li>
+</ul>
+<p data-sourcepos="181:1-181:51">それぞれのログ出力を確認しました。</p>
+<p data-sourcepos="183:1-183:140">StatusCodeの使い分けやログ出力内容の充実など考えると、<code>echo.HTTPError</code>を返すようにするのが良さそうです</p>
+`,body: `github.com/labstack/echoのロギングについての備忘録です.
+echoのログを活用していきたい...と考えてます。
+
+# 前提
+
+* go 1.19
+* echo v4.10.0
+* echoのErrorHandlerはDefaultHTTPErrorHandlerを使用
+    * https://github.com/labstack/echo/blob/v4.10.0/echo.go#L389-L429
+
+# はじめに、正常応答させてみる
+
+echoの\`middleware.Logger\`をカスタマイズせずに使用します。
+
+\`\`\`go 
+// ~省略
+
+e := echo.New()
+e.Use(middleware.Logger())
+
+// ~省略
+
+e.GET("/", func(ctx echo.Context) error ${"$"}{"{"${"$"}{"}"}
+  return ctx.String(http.StatusOK, "Hello world!")
+${"$"}{"}"})
+\`\`\`
+
+curlで呼び出します
+\`\`\`sh 
+#localhost, port=8888で実行しているとき
+curl http://localhost:8888/
+\`\`\`
+
+logの内容 
+\`\`\`json
+${"$"}{"{"${"$"}{"}"}"time":"2023-01-22T03:52:21.307000008Z","id":"","remote_ip":"/*remote ip*/","host":"localhost:8888","method":"GET","uri":"/","user_agent":"curl/7.84.0","status":200,"error":"","latency":134542,"latency_human":"134.542µs","bytes_in":0,"bytes_out":12${"$"}{"}"}
+\`\`\`
+
+正常な振る舞いをしているので\`error\`は空です
+
+# エラー応答について
+
+正常時のログを確認したので、エラー応答のさせ方によるログやレスポンスの違いを見ていきます
+
+## 1. echo.HTTPErrorを返してみる
+\`\`\` go
+e.GET("/", func(ctx echo.Context) error ${"$"}{"{"${"$"}{"}"}
+  // return ctx.String(http.StatusOK, "Hello world!")
+  return &echo.HTTPError${"$"}{"{"${"$"}{"}"}Code: http.StatusNotFound, Message: "エラーメッセージ", Internal: errors.New("エラー内容")${"$"}{"}"}
+${"$"}{"}"})
+\`\`\`
+
+logの内容です
+\`\`\` json
+${"$"}{"{"${"$"}{"}"}"time":"2023-01-22T04:01:40.613879378Z","id":"","remote_ip":"/*remote ip*/","host":"localhost:8888","method":"GET","uri":"/","user_agent":"curl/7.84.0","status":404,"error":"code=404, message=エラーメッセージ, internal=エラー内容","latency":84958,"latency_human":"84.958µs","bytes_in":0,"bytes_out":39${"$"}{"}"}
+\`\`\`
+
+\`error\`の値として\`echo.HTTPError\`で定義した内容（Code, message, internal）が出力されてます。
+
+この時のhttpレスポンスのBodyです
+\`\`\`json 
+${"$"}{"{"${"$"}{"}"}"message":"エラーメッセージ"${"$"}{"}"}
+\`\`\`
+
+### （補足）echo.HTTPErrorを返すけどレスポンスのBodyを自前のstructで定義したい場合 
+
+レスポンスに含まれるのがmessageだけでは物足りないという場合、\`echo.HTTPError\`のMessageに文字列ではなく構造体をセットすることでレスポンスBodyの内容を変えることができます。
+
+\`\`\`go 
+e.GET("/", func(ctx echo.Context) error ${"$"}{"{"${"$"}{"}"}
+	// return ctx.String(http.StatusOK, "Hello world!")
+    // return &echo.HTTPError${"$"}{"{"${"$"}{"}"}Code: http.StatusNotFound, Message: "エラーメッセージ", Internal: errors.New("エラー内容")${"$"}{"}"}
+
+	msgObj := struct ${"$"}{"{"${"$"}{"}"}
+		Prop1 int
+		Prop2 string
+	${"$"}{"}"}${"$"}{"{"${"$"}{"}"}
+		Prop1: 100,
+		Prop2: "AAAAA",
+	${"$"}{"}"}
+	return &echo.HTTPError${"$"}{"{"${"$"}{"}"}Code: http.StatusNotFound, Message: msgObj, Internal: errors.New("エラー内容")${"$"}{"}"}
+${"$"}{"}"})
+\`\`\`
+
+logの内容です
+\`\`\`json 
+${"$"}{"{"${"$"}{"}"}"time":"2023-01-22T04:05:37.928444793Z","id":"","remote_ip":"/*remote ip*/","host":"localhost:8888","method":"GET","uri":"/","user_agent":"curl/7.84.0","status":404,"error":"code=404, message=${"$"}{"{"${"$"}{"}"}100 AAAAA${"$"}{"}"}, internal=エラー内容","latency":3021208,"latency_human":"3.021208ms","bytes_in":0,"bytes_out":30${"$"}{"}"}
+\`\`\`
+
+\`error\`のmessage部分が構造体に置き換わっていることが確認できます。
+
+httpレスポンスのBody 
+
+\`\`\`json 
+${"$"}{"{"${"$"}{"}"}"Prop1":100,"Prop2":"AAAAA"${"$"}{"}"}
+\`\`\`
+
+狙い通り、構造体をjson化して返してくれています。今回はProp1/Prop2といった形でレスポンスをさせましたが、\`${"$"}{"{"${"$"}{"}"}"error_code":"~", "message":"~~"${"$"}{"}"}\`など、レスポンスBodyに\`message\`だけでなく、サービス固有のエラーIDなどを付け加えたい場合に使えそうです。
+
+## 2. errorをそのまま返してみる
+
+\`\`\`go 
+func e.GET("/", func(ctx echo.Context) error ${"$"}{"{"${"$"}{"}"}
+	// return ctx.String(http.StatusOK, "Hello world!")
+	// return &echo.HTTPError${"$"}{"{"${"$"}{"}"}Code: http.StatusNotFound, Message: "エラーメッセージ", Internal: errors.New("エラー内容")${"$"}{"}"}
+	// msgObj := struct ${"$"}{"{"${"$"}{"}"}
+	// 	Prop1 int
+	// 	Prop2 string
+	// ${"$"}{"}"}${"$"}{"{"${"$"}{"}"}
+	// 	Prop1: 100,
+	// 	Prop2: "AAAAA",
+	// ${"$"}{"}"}
+	// return &echo.HTTPError${"$"}{"{"${"$"}{"}"}Code: http.StatusNotFound, Message: msgObj, Internal: errors.New("エラー内容")${"$"}{"}"}
+
+	return errors.New("エラー内容")
+${"$"}{"}"})
+\`\`\`
+
+logの内容です
+\`\`\`json
+${"$"}{"{"${"$"}{"}"}"time":"2023-01-22T04:13:47.412619673Z","id":"","remote_ip":"/*remote ip*/","host":"localhost:8888","method":"GET","uri":"/","user_agent":"curl/7.84.0","status":500,"error":"エラー内容","latency":832958,"latency_human":"832.958µs","bytes_in":0,"bytes_out":36${"$"}{"}"}
+\`\`\`
+\`error\`の値には\`errors.New()\`した内容が出力されています
+
+
+httpレスポンスのBodyです
+\`\`\`json 
+${"$"}{"{"${"$"}{"}"}"message":"Internal Server Error"${"$"}{"}"}
+\`\`\`
+
+InternalServerError（StatusCode=500)固定なので400, 401, 404など使い分けをしたい場合は要求を満たせないです。
+
+## 3. 正常な挙動を装ってInternalServerErrorを返してみる 
+
+\`\`\`go 
+func e.GET("/", func(ctx echo.Context) error ${"$"}{"{"${"$"}{"}"}
+	// return ctx.String(http.StatusOK, "Hello world!")
+	// return &echo.HTTPError${"$"}{"{"${"$"}{"}"}Code: http.StatusNotFound, Message: "エラーメッセージ", Internal: errors.New("エラー内容")${"$"}{"}"}
+	// msgObj := struct ${"$"}{"{"${"$"}{"}"}
+	// 	Prop1 int
+	// 	Prop2 string
+	// ${"$"}{"}"}${"$"}{"{"${"$"}{"}"}
+	// 	Prop1: 100,
+	// 	Prop2: "AAAAA",
+	// ${"$"}{"}"}
+	// return &echo.HTTPError${"$"}{"{"${"$"}{"}"}Code: http.StatusNotFound, Message: msgObj, Internal: errors.New("エラー内容")${"$"}{"}"}
+
+	// return errors.New("エラー内容")
+
+	msgObj := struct ${"$"}{"{"${"$"}{"}"}
+		Prop1 int
+		Prop2 string
+	${"$"}{"}"}${"$"}{"{"${"$"}{"}"}
+		Prop1: 100,
+		Prop2: "AAAAA",
+	${"$"}{"}"}
+	return ctx.JSON(http.StatusInternalServerError, msgObj)
+${"$"}{"}"})
+\`\`\`
+
+logの内容です
+\`\`\`json 
+${"$"}{"{"${"$"}{"}"}"time":"2023-01-22T04:30:00.244131346Z","id":"","remote_ip":"/*remote ip*/","host":"localhost:8888","method":"GET","uri":"/","user_agent":"curl/7.84.0","status":500,"error":"","latency":1925000,"latency_human":"1.925ms","bytes_in":0,"bytes_out":30${"$"}{"}"}
+\`\`\`
+
+\`error\`の値は空
+
+httpレスポンスのBodyです
+\`\`\`json
+${"$"}{"{"${"$"}{"}"}"Prop1":100,"Prop2":"AAAAA"${"$"}{"}"}
+\`\`\`
+
+# まとめ
+
+DefaultHTTPErrorHandlerを使う前提でのエラー時のログについて
+
+* \`echo.HTTPError\`を返す場合
+* \`error\`を返す場合
+* \`ctx.JSON()\`で返す場合
+
+それぞれのログ出力を確認しました。
+
+StatusCodeの使い分けやログ出力内容の充実など考えると、\`echo.HTTPError\`を返すようにするのが良さそうです
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+`,coediting: false,comments_count: 0,created_at: '2023-01-22T13:56:22+09:00',group: '{ }',id: '755c923088dae4716927',likes_count: 0,private: false,reactions_count: 0,tags: [{name: 'Go',versions: [  ]},{name: 'echo',versions: [  ]}],title: 'labstack/echoとmiddleware.Loggerとエラーレスポンス',updated_at: '2023-01-22T13:56:22+09:00',url: 'https://qiita.com/sYamaz/items/755c923088dae4716927',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
+
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p data-sourcepos="1:1-1:233">読み上げてくれればチャット欄見なくていいよねってことで、Youtube APIからライブ配信のコメントをポーリングしつつ、取得したコメントを読み上げさせようとTryしました。</p>
 <p data-sourcepos="3:1-3:48">主に処理部分についての話をします</p>
 <h2 data-sourcepos="5:1-5:9">
 <span id="要素" class="fragment"></span><a href="#%E8%A6%81%E7%B4%A0"><i class="fa fa-link"></i></a>要素</h2>
@@ -256,7 +604,7 @@ Z-.登録.->history
 
 `,coediting: false,comments_count: 0,created_at: '2022-07-28T22:45:16+09:00',group: '{ }',id: '885647616aa57f00a604',likes_count: 1,private: false,reactions_count: 0,tags: [{name: 'TypeScript',versions: [  ]},{name: 'YouTubeAPI',versions: [  ]},{name: 'SpeechSynthesis',versions: [  ]},{name: 'axios',versions: [  ]}],title: 'Youtube API使って得たコメント読み上げさせたい',updated_at: '2022-07-28T22:50:12+09:00',url: 'https://qiita.com/sYamaz/items/885647616aa57f00a604',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
-過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 16,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p data-sourcepos="1:1-2:38">PythonでQiitaApiから自分の記事一覧を取得し、コードを自動生成できるようになりました。<br>
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p data-sourcepos="1:1-2:38">PythonでQiitaApiから自分の記事一覧を取得し、コードを自動生成できるようになりました。<br>
 今回はGitHub Actionsを用いて、</p>
 <ol data-sourcepos="4:1-7:0">
 <li data-sourcepos="4:1-4:68">QiitaApiから記事一覧を取得し、コードを自動生成</li>
@@ -387,7 +735,7 @@ jobs:
 https://github.com/sYamaz/website-nuxt/actions/runs/2379795524
 `,coediting: false,comments_count: 0,created_at: '2022-05-25T20:28:51+09:00',group: '{ }',id: '4a647ad0fafbf0e1e6c0',likes_count: 2,private: false,reactions_count: 0,tags: [{name: 'QiitaAPI',versions: [  ]},{name: 'githubpages',versions: [  ]},{name: 'GitHubActions',versions: [  ]}],title: 'GitHubPagesの内容をGitHubActionsを使って自動更新する',updated_at: '2022-05-25T20:28:51+09:00',url: 'https://qiita.com/sYamaz/items/4a647ad0fafbf0e1e6c0',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
-過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 16,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p data-sourcepos="1:1-1:85">先日@nuxt/axiosを使ってQiitaApiから自分の記事一覧を取得しました</p>
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p data-sourcepos="1:1-1:85">先日@nuxt/axiosを使ってQiitaApiから自分の記事一覧を取得しました</p>
 <p data-sourcepos="3:1-3:51"><qiita-embed-ogp src="https://qiita.com/sYamaz/items/10c8c9db83e5dad62b90"></qiita-embed-ogp></p>
 <p data-sourcepos="5:1-5:209">ただ、この記事の最後に書いたようにスクリプトでコードを自動生成する方が目的に会っていると思っていたのでPythonでQiitaApiにアクセスしようと思います</p>
 <h3 data-sourcepos="7:1-7:10">
@@ -829,7 +1177,7 @@ pythonでQiitaApiから自分の記事一覧を取得、tsファイルを生成�
 を目指そうと思います。
 `,coediting: false,comments_count: 1,created_at: '2022-05-24T22:58:05+09:00',group: '{ }',id: '2e5facc0032ed0801a26',likes_count: 0,private: false,reactions_count: 0,tags: [{name: 'Python',versions: [  ]},{name: 'QiitaAPI',versions: [  ]},{name: 'Python3',versions: [  ]}],title: 'PythonでもQiitaApiから自分の記事一覧を取得したい',updated_at: '2022-05-29T18:02:01+09:00',url: 'https://qiita.com/sYamaz/items/2e5facc0032ed0801a26',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
-過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 16,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p data-sourcepos="1:1-2:238">GitHubpagesに自己紹介サイトを立てて少しずつ拡張しています。<br>
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p data-sourcepos="1:1-2:238">GitHubpagesに自己紹介サイトを立てて少しずつ拡張しています。<br>
 今回、サイトにQiita記事へのリンクを貼りたい、けどリンクをペタペタ貼るのもつまらないということで、QiitaApiから私が書いた記事を取得しサイトに表示することにしました。</p>
 <h3 data-sourcepos="4:1-4:10">
 <span id="準備" class="fragment"></span><a href="#%E6%BA%96%E5%82%99"><i class="fa fa-link"></i></a>準備</h3>
@@ -1181,7 +1529,7 @@ Github Actionを使って定期的にApiアクセス＆コード自動生成→�
 * [https://syamaz.github.io/website-nuxt/](https://syamaz.github.io/website-nuxt/)
 `,coediting: false,comments_count: 0,created_at: '2022-05-23T22:46:08+09:00',group: '{ }',id: '10c8c9db83e5dad62b90',likes_count: 2,private: false,reactions_count: 0,tags: [{name: 'QiitaAPI',versions: [  ]},{name: 'Vue.js',versions: [  ]},{name: 'axios',versions: [  ]},{name: 'Nuxt',versions: [  ]}],title: '@nuxt/axiosを使ってQiita Apiから記事一覧を取得する',updated_at: '2022-05-23T22:46:08+09:00',url: 'https://qiita.com/sYamaz/items/10c8c9db83e5dad62b90',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
-過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 16,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p data-sourcepos="1:1-1:66">2022年5月2日に初めてアプリをリリースしました。</p>
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p data-sourcepos="1:1-1:66">2022年5月2日に初めてアプリをリリースしました。</p>
 <p data-sourcepos="3:1-3:147">今回は提出からリリースに至るまでの審査の過程やリジェクト内容などをサクッと共有できればと思います。</p>
 <h2 data-sourcepos="5:1-5:38">
 <span id="2021年12月15日アプリ提出" class="fragment"></span><a href="#2021%E5%B9%B412%E6%9C%8815%E6%97%A5%E3%82%A2%E3%83%97%E3%83%AA%E6%8F%90%E5%87%BA"><i class="fa fa-link"></i></a>2021年12月15日：アプリ提出</h2>
@@ -1279,7 +1627,7 @@ App Store Connectの審査に自作アプリを提出しました。
 https://apps.apple.com/jp/app/routinetree/id1600469504
 `,coediting: false,comments_count: 0,created_at: '2022-05-11T21:35:51+09:00',group: '{ }',id: '6f6985cc71cd96dfdb4f',likes_count: 0,private: false,reactions_count: 0,tags: [{name: 'AppStore',versions: [  ]},{name: 'AppStoreConnect',versions: [  ]}],title: '初めてAppStoreにアプリを出した話（ほぼ日記）',updated_at: '2022-05-11T21:35:51+09:00',url: 'https://qiita.com/sYamaz/items/6f6985cc71cd96dfdb4f',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
-過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 16,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>タイトルの通りのことをやってみました。</p>
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>タイトルの通りのことをやってみました。</p>
 
 <p>結論から言うと、Blazorをやっているとvueの学習コストが下がるので「dotnetしかやったことないよ！」という人にはVueはお勧めできるかと思います。</p>
 
@@ -1881,7 +2229,7 @@ export default router
 dotnet開発者が→Webに手を広げていく際の一つの道が、「WinForm/WPF/UWP」→「Blazor」→「vue」なのかもしれません
 `,coediting: false,comments_count: 0,created_at: '2022-01-09T17:48:02+09:00',group: '{ }',id: '86f574ec54a1e23ea527',likes_count: 0,private: false,reactions_count: 0,tags: [{name: 'C#',versions: [  ]},{name: 'github-pages',versions: [  ]},{name: 'Vue.js',versions: [  ]},{name: 'Blazor',versions: [  ]}],title: 'C# Blazorで作ったサイトをVue.jsで作り直してみた',updated_at: '2022-01-09T17:48:02+09:00',url: 'https://qiita.com/sYamaz/items/86f574ec54a1e23ea527',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
-過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 16,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>本日で今年の仕事納めなので、2021/10/18から続けていた朝活について共有しようかと思います。<br>
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>本日で今年の仕事納めなので、2021/10/18から続けていた朝活について共有しようかと思います。<br>
 （この記事も2021/12/29の朝活中に書いてます）</p>
 
 <h2>
@@ -2041,7 +2389,7 @@ iOSアプリやBlazorホームページはdotnet開発という仕事での経�
 私個人としてはいいことの方が多かったので来年も続けます。
 `,coediting: false,comments_count: 0,created_at: '2021-12-29T20:55:34+09:00',group: '{ }',id: '664b898221f7fef2b384',likes_count: 2,private: false,reactions_count: 0,tags: [{name: '朝活',versions: [  ]}],title: '朝活開発を約２カ月半行った結果',updated_at: '2021-12-29T20:55:34+09:00',url: 'https://qiita.com/sYamaz/items/664b898221f7fef2b384',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
-過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 16,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>GitHub Pagesで自分のポートフォリオサイト作りたいなと思い立ちましたが</p>
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>GitHub Pagesで自分のポートフォリオサイト作りたいなと思い立ちましたが</p>
 
 <ul>
 <li>markdownで作るのはちょっと味気ない</li>
@@ -2606,7 +2954,7 @@ ${"$"}{"}"}
 https://qiita.com/nobu17/items/116a0d1c949885e21d70
 `,coediting: false,comments_count: 0,created_at: '2021-12-25T20:01:57+09:00',group: '{ }',id: 'd0b12043f5b25a36d8e6',likes_count: 2,private: false,reactions_count: 0,tags: [{name: 'github-pages',versions: [  ]},{name: 'dotnet',versions: [  ]},{name: 'Blazor',versions: [  ]},{name: 'BlazorWebAssembly',versions: [  ]},{name: 'Skclusive-UI',versions: [  ]}],title: 'BlazorでSkclusive-UIを使った話',updated_at: '2021-12-25T20:01:57+09:00',url: 'https://qiita.com/sYamaz/items/d0b12043f5b25a36d8e6',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
-過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 16,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>Human Interface Guidelinesに沿った使い回しが効くようなTextFieldを検討しました</p>
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>Human Interface Guidelinesに沿った使い回しが効くようなTextFieldを検討しました</p>
 
 <ul>
 <li>Swift5</li>
@@ -2916,7 +3264,7 @@ ${"$"}{"}"}
 おおよそのパターンに対応できそうな汎用的なTextFieldができました。
 `,coediting: false,comments_count: 0,created_at: '2021-12-07T22:48:48+09:00',group: '{ }',id: 'cafa6a4e13db71d54eea',likes_count: 1,private: false,reactions_count: 0,tags: [{name: 'Swift',versions: [  ]},{name: 'textField',versions: [  ]},{name: 'SwiftUI',versions: [  ]},{name: 'HumanInterfaceGuidelines',versions: [  ]}],title: 'SwiftUI: Human Interface Guidelinesに沿ったTextField',updated_at: '2021-12-07T22:51:23+09:00',url: 'https://qiita.com/sYamaz/items/cafa6a4e13db71d54eea',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
-過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 16,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>仕事ではdotnet（C#）アプリ開発、プライベートでSwift/SwiftUIでiOSアプリの開発をしています。<br>
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>仕事ではdotnet（C#）アプリ開発、プライベートでSwift/SwiftUIでiOSアプリの開発をしています。<br>
 現在AppStoreへの初リリースを目標に黙々と手を動かしている途中ですが、その際に得られた感覚について共有できればと思います。<br>
 万人に共通するわけではないと思いますが誰かの気づきの一助になれば幸いです。</p>
 
@@ -2951,7 +3299,7 @@ Swift/SwiftUIについては見習いレベルですが、dotnet(C#)開発をそ
 ちゃんと設計することで可読性やメンテナンス性の向上など期待できることは多いですが、初心者のうちはまだそのステージに立っていない（特に独自で設計するとき）ことを自覚しないといつまでたってもリリースできないことに気がつきました
 `,coediting: false,comments_count: 0,created_at: '2021-11-27T23:44:02+09:00',group: '{ }',id: 'cfc3f1bbd0b3cb512a19',likes_count: 4,private: false,reactions_count: 0,tags: [{name: '初心者',versions: [  ]},{name: '考え方',versions: [  ]}],title: '新たなプログラミング言語に挑戦するときは見栄を捨てようという話',updated_at: '2021-11-27T23:44:02+09:00',url: 'https://qiita.com/sYamaz/items/cfc3f1bbd0b3cb512a19',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
-過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 16,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>趣味でSwiftをいじっている私ですが<code>@Published</code>プロパティラッパーとかを見て、「dotnetアプリ開発でお世話になっているReactivePropertyっぽいな...」と思ってました。</p>
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>趣味でSwiftをいじっている私ですが<code>@Published</code>プロパティラッパーとかを見て、「dotnetアプリ開発でお世話になっているReactivePropertyっぽいな...」と思ってました。</p>
 
 <p><qiita-embed-ogp src="https://github.com/runceel/ReactiveProperty"></qiita-embed-ogp></p>
 
@@ -3320,7 +3668,7 @@ OK！
 
 `,coediting: false,comments_count: 0,created_at: '2021-10-30T20:27:51+09:00',group: '{ }',id: '56e943c2536397cc41d4',likes_count: 0,private: false,reactions_count: 0,tags: [{name: 'Swift',versions: [  ]},{name: 'ReactiveProperty',versions: [  ]},{name: 'dotnet',versions: [  ]},{name: 'Combine',versions: [  ]},{name: 'dotnetcore',versions: [  ]}],title: 'dotnet慣れした私がSwift CombineのAnyCancellableの取り扱いでハマった話',updated_at: '2021-10-30T20:27:51+09:00',url: 'https://qiita.com/sYamaz/items/56e943c2536397cc41d4',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
-過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 16,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p><a href="https://qiita.com/sYamaz/items/9ef8fceb5650fc7b7ad8" id="reference-6995fde8c3fa0eb25fc5">体温を最速で入力するためのユーザーインターフェースの検討(その1) - Qiita</a>で体温入力のユーザーインターフェースを考えていました。</p>
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p><a href="https://qiita.com/sYamaz/items/9ef8fceb5650fc7b7ad8" id="reference-6995fde8c3fa0eb25fc5">体温を最速で入力するためのユーザーインターフェースの検討(その1) - Qiita</a>で体温入力のユーザーインターフェースを考えていました。</p>
 
 <p><a href="https://camo.qiitausercontent.com/46e7710c56e7d2ff88ce9381adc1d37869379798/68747470733a2f2f71696974612d696d6167652d73746f72652e73332e61702d6e6f727468656173742d312e616d617a6f6e6177732e636f6d2f302f323038383339392f38383238326330322d613538642d636566342d326132382d3333343131656166656433302e676966" target="_blank" rel="nofollow noopener"><img src="https://qiita-user-contents.imgix.net/https%3A%2F%2Fqiita-image-store.s3.ap-northeast-1.amazonaws.com%2F0%2F2088399%2F88282c02-a58d-cef4-2a28-33411eafed30.gif?ixlib=rb-4.0.0&amp;auto=format&amp;gif-q=60&amp;q=75&amp;s=b10cc6dae9aaf1acec2aa284de125c66" alt="タイトルなし.gif" data-canonical-src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/88282c02-a58d-cef4-2a28-33411eafed30.gif" srcset="https://qiita-user-contents.imgix.net/https%3A%2F%2Fqiita-image-store.s3.ap-northeast-1.amazonaws.com%2F0%2F2088399%2F88282c02-a58d-cef4-2a28-33411eafed30.gif?ixlib=rb-4.0.0&amp;auto=format&amp;gif-q=60&amp;q=75&amp;w=1400&amp;fit=max&amp;s=9e42e486d8a5ded7e523a609cbfd64e3 1x" loading="lazy"></a></p>
 
@@ -3722,7 +4070,7 @@ ${"$"}{"}"}
 Store-Value部分は使いやすいかどうか、テストしやすいかどうかなど今後検証してみたいところです。
 `,coediting: false,comments_count: 0,created_at: '2021-10-27T22:30:12+09:00',group: '{ }',id: '7b72e26ed48579eb814b',likes_count: 1,private: false,reactions_count: 0,tags: [{name: 'MVVM',versions: [  ]},{name: 'Swift',versions: [  ]},{name: 'SwiftUI',versions: [  ]}],title: 'SwiftUI/Swift: 既存のプロジェクトをMVVMパターンに変更する',updated_at: '2021-10-27T22:40:45+09:00',url: 'https://qiita.com/sYamaz/items/7b72e26ed48579eb814b',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
-過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 16,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>体調管理（と会社での感染予防）のために毎朝体温を測るのが習慣化しています。<br>
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>体調管理（と会社での感染予防）のために毎朝体温を測るのが習慣化しています。<br>
 しかし、朝の1分1秒は非常に貴重な時間です。できればiPhoneでの体温データ入力も極限まで無駄を減らしたいところです。</p>
 
 <p>そこで、体温を最速で入力するためにはどんな入力インターフェースがいいのかを検討してみようと思いました。</p>
@@ -3954,7 +4302,7 @@ https://github.com/sYamaz/BodyTempLogger
 
 `,coediting: false,comments_count: 0,created_at: '2021-10-17T22:22:01+09:00',group: '{ }',id: '9ef8fceb5650fc7b7ad8',likes_count: 1,private: false,reactions_count: 0,tags: [{name: 'UI',versions: [  ]},{name: 'Swift',versions: [  ]},{name: 'HealthKit',versions: [  ]},{name: 'ユーザーインターフェース',versions: [  ]},{name: 'SwiftUI',versions: [  ]}],title: '体温を最速で入力するためのユーザーインターフェースの検討（その1）',updated_at: '2021-10-28T22:25:02+09:00',url: 'https://qiita.com/sYamaz/items/9ef8fceb5650fc7b7ad8',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
-過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 16,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>まずは公式ドキュメントをちゃんと読む人間になろうと思いたち、Apple公式ドキュメント<strong>だけ</strong>を元にHealthKitにアクセスを試みました。</p>
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>まずは公式ドキュメントをちゃんと読む人間になろうと思いたち、Apple公式ドキュメント<strong>だけ</strong>を元にHealthKitにアクセスを試みました。</p>
 
 <h1>
 <span id="環境" class="fragment"></span><a href="#%E7%92%B0%E5%A2%83"><i class="fa fa-link"></i></a>環境</h1>
@@ -4296,7 +4644,7 @@ ${"$"}{"}"}
 ![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/3e4d3f4a-c05a-c2c6-98ec-51bd21a79249.png)
 `,coediting: false,comments_count: 1,created_at: '2021-10-14T22:26:17+09:00',group: '{ }',id: 'cedfd869f74f14b4b25b',likes_count: 0,private: false,reactions_count: 0,tags: [{name: 'Swift',versions: [  ]},{name: 'HealthKit',versions: [  ]}],title: 'Swift: HealthKitに体温データを入力する。できるだけ公式ドキュメントだけを見て。',updated_at: '2021-12-30T15:59:37+09:00',url: 'https://qiita.com/sYamaz/items/cedfd869f74f14b4b25b',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
-過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 16,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>前回、<a href="https://qiita.com/sYamaz/items/1a29a2cb5b3207ad87dc" id="reference-b37a8931e3901955ed10">SwiftでMarkdownを解析してオブジェクトツリーに変換する</a>という記事を作成しましたが、今回はその続きです。</p>
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>前回、<a href="https://qiita.com/sYamaz/items/1a29a2cb5b3207ad87dc" id="reference-b37a8931e3901955ed10">SwiftでMarkdownを解析してオブジェクトツリーに変換する</a>という記事を作成しましたが、今回はその続きです。</p>
 
 <p>尚、前回記事で「レンダリングはしてくれるけどオブジェクトツリーにしてくれるパッケージあまりないな...」と言いましたが大抵のSwiftのMarkdownレンダリング系パッケージは</p>
 
@@ -4525,7 +4873,7 @@ https://github.com/sYamaz/MarkdownAnalyzer
 
 `,coediting: false,comments_count: 0,created_at: '2021-10-03T22:30:32+09:00',group: '{ }',id: '31ef5374ad7c9a0dfde4',likes_count: 0,private: false,reactions_count: 0,tags: [{name: 'test',versions: [  ]},{name: 'Markdown',versions: [  ]},{name: '構文解析',versions: [  ]},{name: 'Swift',versions: [  ]}],title: 'Swift：開発中のMarkdown解析パッケージをもう少しテストしやすくする',updated_at: '2021-10-03T22:30:32+09:00',url: 'https://qiita.com/sYamaz/items/31ef5374ad7c9a0dfde4',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
-過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 16,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>Markdownをレンダリングしてくれるパッケージはあるけど、オブジェクトツリーにしてくれるものは無いなと思ったのでやってみてます。</p>
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p>Markdownをレンダリングしてくれるパッケージはあるけど、オブジェクトツリーにしてくれるものは無いなと思ったのでやってみてます。</p>
 
 <p>オブジェクトツリーに変換できるとコードからMarkdownを扱いやすくなるんじゃないかと思ってます。</p>
 
@@ -5951,4 +6299,4 @@ ${"$"}{"}"}
 \`\`\`
 `,coediting: false,comments_count: 0,created_at: '2021-09-26T22:19:57+09:00',group: '{ }',id: '1a29a2cb5b3207ad87dc',likes_count: 3,private: false,reactions_count: 0,tags: [{name: 'Markdown',versions: [  ]},{name: '構文解析',versions: [  ]},{name: 'Swift',versions: [  ]}],title: 'SwiftでMarkdownを解析してオブジェクトツリーに変換する',updated_at: '2021-10-06T07:54:17+09:00',url: 'https://qiita.com/sYamaz/items/1a29a2cb5b3207ad87dc',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
-過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 16,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }}]
+過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 17,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }}]
