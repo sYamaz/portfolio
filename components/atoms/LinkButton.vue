@@ -1,5 +1,5 @@
 <template>
-  <v-btn elevation="0" class="info--text" :append-icon="prop.linkData.icon" :href="prop.linkData.url" variant="text">
+  <v-btn elevation="0" class="info--text" style="text-transform:none;" :append-icon="prop.linkData.icon" :href="prop.linkData.url" variant="text">
     {{ prop.linkData.name }}
   </v-btn>
 </template>
