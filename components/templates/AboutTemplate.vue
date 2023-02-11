@@ -1,5 +1,5 @@
 <template>
-  <v-card elevation="1" class="pa-6">
+  <v-card elevation="0" class="pa-6">
     <PageHeadline :title="prop.data.pageTitle" />
     <AvatarDescriptionSection
       :avatar-src="prop.data.introAvatar"

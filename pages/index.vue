@@ -11,11 +11,11 @@ const getStaticImageUrl = (name:any) => {
 }
 
 const data: AboutTemplateData = {
-  pageTitle: 'Shun Yamazaki (sYamaz)',
+  pageTitle: 'Shun Yamazaki',
   introAvatar: getStaticImageUrl('sYamaz.jpeg'),
   introHeadline: 'Corporate developer',
   introDescription:
-      'Shun is a developer based in Japan. He is focusing on daily development and improving his skills to achieve his goal of becoming a full-stack engineer.',
+      'Shun is a developer based in Shizuoka in Japan. He is focusing on daily development and improving his skills to achieve his goal of becoming a full-stack engineer.',
   bioTitle: 'Biography',
   bioRecords: [
     {

@@ -1,13 +1,12 @@
 <template>
   <v-container>
-    <v-row class="">
-      <v-col cols="12" sm="2" style="max-width: fit-content;" class="pa-4">
-        <v-avatar alt="sYamaz" s size="64">
-          <img :src="prop.avatarSrc" width="64" height="64">
+    <v-row no-gutters>
+      <v-col cols="12" sm="12" class="d-flex justify-center" style="min-width:fit-content;">
+        <v-avatar alt="sYamaz" size="84" class="my-1">
+          <img :src="prop.avatarSrc" width="84" height="84">
         </v-avatar>
       </v-col>
-      <v-col class="" align-self="center">
-        <SubContentHeadline :title="prop.headline" />
+      <v-col>
         <p>{{ prop.description }}</p>
       </v-col>
     </v-row>
@@ -15,7 +14,6 @@
 </template>
 
 <script lang="ts" setup>
-import SubContentHeadline from '~/components/atoms/SubContentHeadline.vue'
 
-const prop = defineProps<{headline:string, description:string, avatarSrc:any}>()
+const prop = defineProps<{ headline: string, description: string, avatarSrc: any }>()
 </script>
