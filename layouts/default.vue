@@ -1,28 +1,38 @@
 <template>
   <v-app :theme="theme">
-    <v-navigation-drawer v-model="drawer" fixed app>
-      <v-list>
-        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ item.title }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-app-bar style="backdrop-filter: blur(10px);" :color="isDark() ? '#FFFFFF00' : '#FFFFFF10'">
+    <v-app-bar style="backdrop-filter: blur(10px);" :color="isDark() ? '#FFFFFF00' : '#FFFFFF10'" class="d-flex justify-center">
       <v-toolbar-title>
         {{ title }}
       </v-toolbar-title>
+      <v-btn
+        v-for="(item, i) in items"
+        :key="i"
+        :to="item.to"
+        class="d-none d-sm-flex"
+      >
+        {{ item.title }}
+      </v-btn>
       <v-app-bar-nav-icon @click.stop="changeTheme(isDark() ? 'light' : 'dark')">
         <v-icon v-if="isDark()" icon="mdi-white-balance-sunny" />
         <v-icon v-else icon="mdi-weather-night" />
       </v-app-bar-nav-icon>
-      <v-app-bar-nav-icon :href="sourceUrl">
+      <v-app-bar-nav-icon :href="sourceUrl" sm>
         <v-icon icon="mdi-github" />
       </v-app-bar-nav-icon>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-menu>
+        <template #activator="{props}">
+          <v-app-bar-nav-icon class="d-sm-none" v-bind="props" />
+        </template>
+        <v-list>
+          <v-list-item v-for="(item, i) in items" :key="i" :to="item.to">
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ item.title }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
     <v-main>
       <v-container style="max-width:640px;">
@@ -54,7 +64,6 @@ const items = [
   }
 ]
 const theme = ref('dark')
-const drawer = ref(false)
 const isDark = () => theme.value === 'dark'
 const changeTheme = (mode: Mode) => { theme.value = mode }
 </script>
