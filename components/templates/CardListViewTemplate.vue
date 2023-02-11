@@ -1,12 +1,8 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12">
-      <PageHeadline :title="prop.data.pageTitle" />
-      <v-container>
-        <WorkCard v-for="work in prop.data.works" :key="work.name" class="my-4" :work="work" />
-      </v-container>
-    </v-col>
-  </v-row>
+  <PageHeadline :title="prop.data.pageTitle" />
+  <v-container>
+    <WorkCard v-for="work in prop.data.works" :key="work.name" class="my-4" :work="work" />
+  </v-container>
 </template>
 
 <script lang="ts" setup>
