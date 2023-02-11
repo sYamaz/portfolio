@@ -25,7 +25,7 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
     </v-app-bar>
     <v-main>
-      <v-container style="max-width:800px;">
+      <v-container style="max-width:640px;">
         <NuxtPage />
       </v-container>
     </v-main>
