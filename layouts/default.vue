@@ -1,9 +1,9 @@
 <template>
   <v-app :theme="theme">
     <v-app-bar style="backdrop-filter: blur(10px);" :color="isDark() ? '#FFFFFF00' : '#FFFFFF10'" class="d-flex justify-center">
-      <v-toolbar-title>
+      <v-app-bar-title>
         {{ title }}
-      </v-toolbar-title>
+      </v-app-bar-title>
       <v-btn
         v-for="(item, i) in items"
         :key="i"
