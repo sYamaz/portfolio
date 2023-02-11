@@ -28,7 +28,7 @@ const data: CardListViewTemplateData = {
     },
     {
       name: 'My homepage',
-      img: '',
+      img: getStaticImageUrl('MyHomepage.png'),
       text: 'This website.',
       platform: ['Web'],
       status: 'Released',
