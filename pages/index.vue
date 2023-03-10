@@ -35,6 +35,7 @@ const data: AboutTemplateData = {
       col2: 'Work as a developer at Z-kai inc.'
     }
   ],
+  worksLink: '/works',
   hobbyTitle: 'Hobby',
   hobbyItems: ['Music🎵', ' Guitar🎸', 'Ramen🍜', 'Travel🛫'],
   webTitle: 'Web',
