@@ -11,6 +11,12 @@
     <ContentSection :title="prop.data.bioTitle">
       <TwoColomnsTable :records="prop.data.bioRecords" />
     </ContentSection>
+    <v-row no-gutters>
+      <v-btn class="mx-auto" :to="prop.data.worksLink">
+        works
+        <v-icon>mdi-chevron-right</v-icon>
+      </v-btn>
+    </v-row>
     <!--Hobby-->
     <ContentSection :title="prop.data.hobbyTitle">
       <JoinedText :text-array="prop.data.hobbyItems" class="ml-4" />
@@ -39,6 +45,8 @@ export interface AboutTemplateData {
 
   bioTitle: string,
   bioRecords: TwoColomnsRecord[]
+
+  worksLink: string,
 
   hobbyTitle: string,
   hobbyItems: string[]
