@@ -361,17 +361,17 @@ StatusCodeの使い分けやログ出力内容の充実など考えると、\`ec
 <span class="c1">// VideoResponseは省略</span>
 
 <span class="k">export</span> <span class="kr">interface</span> <span class="nx">IVideoApi</span><span class="p">${"$"}{"{"${"$"}{"}"}</span>
-  <span class="nx">list</span><span class="p">(</span><span class="nx">videoId</span><span class="p">:</span><span class="kr">string</span><span class="p">)</span> <span class="p">:</span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">VideoResponse</span><span class="o">&gt;</span>
+  <span class="nf">list</span><span class="p">(</span><span class="nx">videoId</span><span class="p">:</span><span class="kr">string</span><span class="p">)</span> <span class="p">:</span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">VideoResponse</span><span class="o">&gt;</span>
 <span class="p">${"$"}{"}"}</span>
 
-<span class="k">export</span> <span class="kd">class</span> <span class="nx">VideoApi</span> <span class="k">implements</span> <span class="nx">IVideoApi</span><span class="p">${"$"}{"{"${"$"}{"}"}</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nc">VideoApi</span> <span class="k">implements</span> <span class="nx">IVideoApi</span><span class="p">${"$"}{"{"${"$"}{"}"}</span>
   <span class="k">private</span> <span class="k">readonly</span> <span class="nx">key</span><span class="p">:</span><span class="kr">string</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="nx">key</span><span class="p">:</span><span class="kr">string</span><span class="p">)${"$"}{"{"${"$"}{"}"}</span>
+  <span class="nf">constructor</span><span class="p">(</span><span class="nx">key</span><span class="p">:</span><span class="kr">string</span><span class="p">)${"$"}{"{"${"$"}{"}"}</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">key</span> <span class="o">=</span> <span class="nx">key</span>
   <span class="p">${"$"}{"}"}</span>
 
-  <span class="nx">list</span><span class="p">(</span><span class="nx">videoId</span><span class="p">:</span><span class="kr">string</span><span class="p">):</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">VideoResponse</span><span class="o">&gt;</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
+  <span class="nf">list</span><span class="p">(</span><span class="nx">videoId</span><span class="p">:</span><span class="kr">string</span><span class="p">):</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">VideoResponse</span><span class="o">&gt;</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
     <span class="kd">const</span> <span class="na">config</span><span class="p">:</span> <span class="nx">AxiosRequestConfig</span> <span class="o">=</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
       <span class="na">params</span><span class="p">:${"$"}{"{"${"$"}{"}"}</span>
         <span class="na">part</span><span class="p">:</span> <span class="dl">"</span><span class="s2">liveStreamingDetails</span><span class="dl">"</span><span class="p">,</span>
@@ -379,7 +379,7 @@ StatusCodeの使い分けやログ出力内容の充実など考えると、\`ec
         <span class="na">key</span><span class="p">:</span><span class="k">this</span><span class="p">.</span><span class="nx">key</span>
       <span class="p">${"$"}{"}"}</span>
     <span class="p">${"$"}{"}"}</span>
-    <span class="k">return</span> <span class="nx">axios</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://www.googleapis.com/youtube/v3/videos</span><span class="dl">"</span><span class="p">,</span> <span class="nx">config</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">r</span> <span class="o">=&gt;</span> <span class="nx">r</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">axios</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://www.googleapis.com/youtube/v3/videos</span><span class="dl">"</span><span class="p">,</span> <span class="nx">config</span><span class="p">).</span><span class="nf">then</span><span class="p">(</span><span class="nx">r</span> <span class="o">=&gt;</span> <span class="nx">r</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
   <span class="p">${"$"}{"}"}</span>
 <span class="p">${"$"}{"}"}</span>
 </code></pre></div></div>
@@ -390,15 +390,15 @@ StatusCodeの使い分けやログ出力内容の充実など考えると、\`ec
 <div class="code-frame" data-lang="ts" data-sourcepos="49:1-86:3"><div class="highlight"><pre><code>
 <span class="c1">// LiveChatMessagesResponseは省略</span>
 
-<span class="k">export</span> <span class="kd">class</span> <span class="nx">LiveChatMessagesApi</span> <span class="k">implements</span> <span class="nx">ILiveChatMessagesApi</span><span class="p">${"$"}{"{"${"$"}{"}"}</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nc">LiveChatMessagesApi</span> <span class="k">implements</span> <span class="nx">ILiveChatMessagesApi</span><span class="p">${"$"}{"{"${"$"}{"}"}</span>
   <span class="k">private</span> <span class="k">readonly</span> <span class="nx">key</span><span class="p">:</span><span class="kr">string</span> <span class="o">=</span> <span class="dl">""</span>
-  <span class="kd">constructor</span><span class="p">(</span><span class="nx">key</span><span class="p">:</span><span class="kr">string</span><span class="p">)${"$"}{"{"${"$"}{"}"}</span>
+  <span class="nf">constructor</span><span class="p">(</span><span class="nx">key</span><span class="p">:</span><span class="kr">string</span><span class="p">)${"$"}{"{"${"$"}{"}"}</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">key</span> <span class="o">=</span> <span class="nx">key</span>
   <span class="p">${"$"}{"}"}</span>
 
-  <span class="k">async</span> <span class="nx">startList</span><span class="p">(</span><span class="nx">liveChatId</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">maxResults</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">nextPageToken</span><span class="p">:</span> <span class="kr">string</span> <span class="o">|</span> <span class="kc">null</span><span class="p">):</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">LiveChatMessagesResponse</span><span class="o">&gt;</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
+  <span class="k">async</span> <span class="nf">startList</span><span class="p">(</span><span class="nx">liveChatId</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">maxResults</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">nextPageToken</span><span class="p">:</span> <span class="kr">string</span> <span class="o">|</span> <span class="kc">null</span><span class="p">):</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">LiveChatMessagesResponse</span><span class="o">&gt;</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
     <span class="kd">let</span> <span class="na">config</span><span class="p">:</span> <span class="nx">AxiosRequestConfig</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">nextPageToken</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
+    <span class="nf">if </span><span class="p">(</span><span class="nx">nextPageToken</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
       <span class="nx">config</span> <span class="o">=</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
         <span class="na">params</span><span class="p">:${"$"}{"{"${"$"}{"}"}</span>
           <span class="nx">liveChatId</span><span class="p">,</span>
@@ -419,7 +419,7 @@ StatusCodeの使い分けやログ出力内容の充実など考えると、\`ec
       <span class="p">${"$"}{"}"}</span>
     <span class="p">${"$"}{"}"}</span>
 
-    <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">axios</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://www.googleapis.com/youtube/v3/liveChat/messages</span><span class="dl">"</span><span class="p">,</span> <span class="nx">config</span><span class="p">)</span>
+    <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">axios</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://www.googleapis.com/youtube/v3/liveChat/messages</span><span class="dl">"</span><span class="p">,</span> <span class="nx">config</span><span class="p">)</span>
     <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span>
   <span class="p">${"$"}{"}"}</span>
 <span class="p">${"$"}{"}"}</span>
@@ -428,15 +428,15 @@ StatusCodeの使い分けやログ出力内容の充実など考えると、\`ec
 <span id="speechsynthesis" class="fragment"></span><a href="#speechsynthesis"><i class="fa fa-link"></i></a>SpeechSynthesis</h3>
 <p data-sourcepos="90:1-90:33">文字列を読み上げさせる</p>
 <div class="code-frame" data-lang="ts" data-sourcepos="92:1-105:3"><div class="highlight"><pre><code><span class="k">export</span> <span class="kr">interface</span> <span class="nx">ISpeaker</span><span class="p">${"$"}{"{"${"$"}{"}"}</span>
-  <span class="nx">speak</span><span class="p">(</span><span class="nx">txt</span><span class="p">:</span><span class="kr">string</span><span class="p">):</span><span class="k">void</span>
+  <span class="nf">speak</span><span class="p">(</span><span class="nx">txt</span><span class="p">:</span><span class="kr">string</span><span class="p">):</span><span class="k">void</span>
 <span class="p">${"$"}{"}"}</span>
 
-<span class="k">export</span> <span class="kd">class</span> <span class="nx">Speaker</span> <span class="k">implements</span> <span class="nx">ISpeaker</span><span class="p">${"$"}{"{"${"$"}{"}"}</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nc">Speaker</span> <span class="k">implements</span> <span class="nx">ISpeaker</span><span class="p">${"$"}{"{"${"$"}{"}"}</span>
   <span class="c1">// 設計の都合上クラスにしているが、この関数だけで良い</span>
-  <span class="nx">speak</span><span class="p">(</span><span class="nx">txt</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="k">void</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
-    <span class="kd">const</span> <span class="nx">synthes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SpeechSynthesisUtterance</span><span class="p">(</span><span class="nx">txt</span><span class="p">)</span>
+  <span class="nf">speak</span><span class="p">(</span><span class="nx">txt</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="k">void</span> <span class="p">${"$"}{"{"${"$"}{"}"}</span>
+    <span class="kd">const</span> <span class="nx">synthes</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SpeechSynthesisUtterance</span><span class="p">(</span><span class="nx">txt</span><span class="p">)</span>
     <span class="nx">synthes</span><span class="p">.</span><span class="nx">lang</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">ja-JP</span><span class="dl">"</span>
-    <span class="nx">speechSynthesis</span><span class="p">.</span><span class="nx">speak</span><span class="p">(</span><span class="nx">synthes</span><span class="p">)</span>
+    <span class="nx">speechSynthesis</span><span class="p">.</span><span class="nf">speak</span><span class="p">(</span><span class="nx">synthes</span><span class="p">)</span>
   <span class="p">${"$"}{"}"}</span>
 <span class="p">${"$"}{"}"}</span>
 </code></pre></div></div>
@@ -448,9 +448,11 @@ StatusCodeの使い分けやログ出力内容の充実など考えると、\`ec
 <li data-sourcepos="111:1-112:0">APIからコメント取得するのと読み上げは非同期ループ</li>
 </ul>
 <p data-sourcepos="113:1-113:27">というイメージです</p>
-<qiita-mermaid data-content='${"$"}{"{"${"$"}{"}"}"data":"graph TD;\\n\\nA[urlから動画ID取得]\\nB[Videos APIからチャットID取得]\\nC[LiveChatMessages APIからコメント取得]\\nD[インターバル]\\nstore(コメントのキュー FIFO)\\nhistory(読み上げたものの履歴)\\nZ[コメント読み上げ]\\nY[インターバル]\\n\\nA--&gt;B\\nB--&gt;C\\nC--&gt;D\\nD--停止するまで繰り返す--&gt;B\\nC-.登録.-&gt;store\\n\\nZ-.取得.-&gt;store\\nZ--&gt;Y\\nY--停止するまで繰り返す--&gt;Z\\nZ-.登録.-&gt;history\\n","key":"438b683b35f6d031efd58ae93998a5fc"${"$"}{"}"}'></qiita-mermaid>
+<iframe id="qiita-embed-content__b6a6cb83542aa1660e58c9899a548d64" src="https://qiita.com/embed-contents/mermaid#qiita-embed-content__b6a6cb83542aa1660e58c9899a548d64" style="width:100%;" frameborder="0" scrolling="no" loading="lazy" data-content='${"$"}{"{"${"$"}{"}"}"data":"graph TD;\\n\\nA[urlから動画ID取得]\\nB[Videos APIからチャットID取得]\\nC[LiveChatMessages APIからコメント取得]\\nD[インターバル]\\nstore(コメントのキュー FIFO)\\nhistory(読み上げたものの履歴)\\nZ[コメント読み上げ]\\nY[インターバル]\\n\\nA--&gt;B\\nB--&gt;C\\nC--&gt;D\\nD--停止するまで繰り返す--&gt;B\\nC-.登録.-&gt;store\\n\\nZ-.取得.-&gt;store\\nZ--&gt;Y\\nY--停止するまで繰り返す--&gt;Z\\nZ-.登録.-&gt;history\\n","key":"438b683b35f6d031efd58ae93998a5fc"${"$"}{"}"}'>
+</iframe>
+
 <p data-sourcepos="140:1-140:183"><code>読み上げたものの履歴</code>をUIに表示させればWebアプリとしてはある程度の形になります。(ユーザー名、コメント内容は黄色で伏せてます)</p>
-<p data-sourcepos="142:1-142:164"><a href="https://camo.qiitausercontent.com/357512f3981c08ed2daa0392ed19a03de0303d28/68747470733a2f2f71696974612d696d6167652d73746f72652e73332e61702d6e6f727468656173742d312e616d617a6f6e6177732e636f6d2f302f323038383339392f39373463383030632d666661662d373539612d633737652d3738343164323866396337362e706e67" target="_blank" rel="nofollow noopener"><img src="https://qiita-user-contents.imgix.net/https%3A%2F%2Fqiita-image-store.s3.ap-northeast-1.amazonaws.com%2F0%2F2088399%2F974c800c-ffaf-759a-c77e-7841d28f9c76.png?ixlib=rb-4.0.0&amp;auto=format&amp;gif-q=60&amp;q=75&amp;s=4a28428fd388d603d900a83ab669f606" alt="スクリーンショット 2022-07-28 22.33.53.png" data-canonical-src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/974c800c-ffaf-759a-c77e-7841d28f9c76.png" srcset="https://qiita-user-contents.imgix.net/https%3A%2F%2Fqiita-image-store.s3.ap-northeast-1.amazonaws.com%2F0%2F2088399%2F974c800c-ffaf-759a-c77e-7841d28f9c76.png?ixlib=rb-4.0.0&amp;auto=format&amp;gif-q=60&amp;q=75&amp;w=1400&amp;fit=max&amp;s=3d8fb8f2aed3a1b2dd8876d8f20fd508 1x" loading="lazy"></a></p>
+<p data-sourcepos="142:1-142:164"><a href="https://camo.qiitausercontent.com/357512f3981c08ed2daa0392ed19a03de0303d28/68747470733a2f2f71696974612d696d6167652d73746f72652e73332e61702d6e6f727468656173742d312e616d617a6f6e6177732e636f6d2f302f323038383339392f39373463383030632d666661662d373539612d633737652d3738343164323866396337362e706e67" target="_blank" rel="nofollow noopener"><img src="https://camo.qiitausercontent.com/357512f3981c08ed2daa0392ed19a03de0303d28/68747470733a2f2f71696974612d696d6167652d73746f72652e73332e61702d6e6f727468656173742d312e616d617a6f6e6177732e636f6d2f302f323038383339392f39373463383030632d666661662d373539612d633737652d3738343164323866396337362e706e67" alt="スクリーンショット 2022-07-28 22.33.53.png" data-canonical-src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/974c800c-ffaf-759a-c77e-7841d28f9c76.png" loading="lazy"></a></p>
 `,body: `読み上げてくれればチャット欄見なくていいよねってことで、Youtube APIからライブ配信のコメントをポーリングしつつ、取得したコメントを読み上げさせようとTryしました。
 
 主に処理部分についての話をします
@@ -667,7 +669,9 @@ Z-.登録.->history
 <h2 data-sourcepos="61:1-61:9">
 <span id="結果" class="fragment"></span><a href="#%E7%B5%90%E6%9E%9C"><i class="fa fa-link"></i></a>結果</h2>
 <p data-sourcepos="63:1-63:66">今日の3時ごろに実行されていたようなのでOKです</p>
-<p data-sourcepos="65:1-65:62"><qiita-embed-ogp src="https://github.com/sYamaz/website-nuxt/actions/runs/2379795524"></qiita-embed-ogp></p>
+<p data-sourcepos="65:1-65:62"><iframe id="qiita-embed-content__7687916f4052e13873be1c7180e228ec" src="https://qiita.com/embed-contents/link-card#qiita-embed-content__7687916f4052e13873be1c7180e228ec" data-content="https%3A%2F%2Fgithub.com%2FsYamaz%2Fwebsite-nuxt%2Factions%2Fruns%2F2379795524" frameborder="0" scrolling="no" loading="lazy" style="width:100%;" height="29">
+</iframe>
+</p>
 `,body: `PythonでQiitaApiから自分の記事一覧を取得し、コードを自動生成できるようになりました。
 今回はGitHub Actionsを用いて、
 
