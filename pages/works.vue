@@ -17,6 +17,16 @@ const data: CardListViewTemplateData = {
   pageTitle: 'Works',
   works: [
     {
+      name: 'doc-web',
+      img: getStaticImageUrl('doc-web.png'),
+      text: 'markdown editor. (frontend and backend)',
+      platform: ['Web'],
+      status: 'Private',
+      url: '',
+      outerurl: '',
+      buttonName: ''
+    },
+    {
       name: 'Youtube-to-speech',
       img: getStaticImageUrl('youtube2speech.png'),
       text: 'youtube-live comment reader. (Web speech API)',
