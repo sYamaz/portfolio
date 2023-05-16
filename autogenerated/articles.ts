@@ -275,7 +275,7 @@ ${"$"}logger.debug("message")
 \`\`\`
 
 
-`,coediting: false,comments_count: 0,created_at: '2023-04-08T15:57:52+09:00',group: '{ }',id: 'e6579c0ed0eb6b8c5bde',likes_count: 1,private: false,reactions_count: 0,tags: [{name: 'Vue.js',versions: [  ]},{name: 'Nuxt3',versions: [  ]}],title: 'nuxt3 provideを使ったログ実装のTry',updated_at: '2023-04-08T15:57:52+09:00',url: 'https://qiita.com/sYamaz/items/e6579c0ed0eb6b8c5bde',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
+`,coediting: false,comments_count: 0,created_at: '2023-04-08T15:57:52+09:00',group: '{ }',id: 'e6579c0ed0eb6b8c5bde',likes_count: 2,private: false,reactions_count: 0,tags: [{name: 'Vue.js',versions: [  ]},{name: 'Nuxt3',versions: [  ]}],title: 'nuxt3 provideを使ったログ実装のTry',updated_at: '2023-04-08T15:57:52+09:00',url: 'https://qiita.com/sYamaz/items/e6579c0ed0eb6b8c5bde',user: {description: `職業Web (フロントエンド、バックエンド）開発者。vue,nuxt,go,awsなど。
 
 過去dotnetを使ってたこともありました。`,facebook_id: '',followees_count: 0,followers_count: 1,github_login_name: 'sYamaz',id: 'sYamaz',items_count: 18,linkedin_id: 'shun-yamazaki/',location: '',name: 'Shun Yamazaki',organization: '',permanent_id: '2088399',profile_image_url: 'https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2088399/profile-images/1639196322',team_only: false,twitter_screen_name: 'ShunYamazaki5',website_url: 'https://syamaz.github.io/portfolio/'},page_views_count: null,team_membership: { }},{rendered_body: `<p data-sourcepos="1:1-2:64">github.com/labstack/echoのロギングについての備忘録です.<br>
 echoのログを活用していきたい...と考えてます。</p>
