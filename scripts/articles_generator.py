@@ -145,6 +145,7 @@ def main(out_path):
 
   response = requests.get('https://qiita.com/api/v2/items?query=user:sYamaz')
   items = json.loads(response.text)
+  
 
   lines = []
   for item in items:
@@ -153,7 +154,8 @@ def main(out_path):
 
 
 
-  text = 'export const articles = [' + ','.join(lines) + ']'
+  # text = 'export const articles = [' + ','.join(lines) + ']'
+  text = '{"articles":' + response.text + '}'
   if os.path.exists(os.path.dirname(out_path)) == False:
     os.makedirs(os.path.dirname(out_path))
   f = io.open(out_path, 'w')

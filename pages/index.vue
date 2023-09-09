@@ -6,13 +6,9 @@ import AboutTemplate, {
   AboutTemplateData
 } from '~/components/templates/AboutTemplate.vue'
 
-const getStaticImageUrl = (name:any) => {
-  return new URL(`../static/${name}`, import.meta.url).href
-}
-
 const data: AboutTemplateData = {
   pageTitle: 'Shun Yamazaki',
-  introAvatar: getStaticImageUrl('sYamaz.jpeg'),
+  introAvatar: 'sYamaz.jpeg',
   introHeadline: 'Corporate developer',
   introDescription:
       'Shun is a developer based in Shizuoka in Japan. He is focusing on daily development and improving his skills to achieve his goal of becoming a full-stack engineer.',
