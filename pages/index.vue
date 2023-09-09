@@ -39,18 +39,18 @@ const webLinks = [
   }
 ]
 
-onMounted(() => {
-  fetch('bios.json').then((res) => {
-    return res.json()
-  }).then((json) => {
-    data.value.bioRecords = json.bioRecords
-  })
-  fetch('self-intro.json').then((res) => {
-    return res.json()
-  }).then((json) => {
-    data.value.introAvatar = json.introAvatar
-    data.value.introDescription = json.introDescription
-  })
-  data.value.webLinks = webLinks
+fetch('bios.json').then((res) => {
+  return res.json()
+}).then((json) => {
+  data.value.bioRecords = json.bioRecords
 })
+
+fetch('self-intro.json').then((res) => {
+  return res.json()
+}).then((json) => {
+  data.value.introAvatar = json.introAvatar
+  data.value.introDescription = json.introDescription
+})
+data.value.webLinks = webLinks
+
 </script>

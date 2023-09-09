@@ -13,12 +13,10 @@ const data = ref({
   ]
 } as CardListViewTemplateData)
 
-onMounted(() => {
-  fetch('works.json').then((res) => {
-    return res.json()
-  }).then((json) => {
-    data.value.works = json.works
-  })
+fetch('works.json').then((res) => {
+  return res.json()
+}).then((json) => {
+  data.value.works = json.works
 })
 
 </script>
