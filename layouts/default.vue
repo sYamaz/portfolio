@@ -41,7 +41,7 @@
     </v-main>
     <v-footer :absolute="true" app>
       <v-spacer />
-      <span class="text-disabled text-caption">&copy; {{ new Date().getFullYear() }} Shun Yamazaki. All Rights Reserved.</span>
+      <span class="">&copy; {{ new Date().getFullYear() }} Shun Yamazaki. All Rights Reserved.</span>
       <v-spacer />
     </v-footer>
   </v-app>
