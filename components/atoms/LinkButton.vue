@@ -6,6 +6,7 @@
     :append-icon="prop.linkData.icon"
     :href="prop.linkData.url"
     variant="text"
+    role="link"
   >
     {{ prop.linkData.name }}
   </v-btn>
