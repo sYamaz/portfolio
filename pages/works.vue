@@ -7,10 +7,6 @@ import CardListViewTemplate, {
   CardListViewTemplateData
 } from '../components/templates/CardListViewTemplate.vue'
 
-const getStaticImageUrl = (name:any) => {
-  return new URL(`../static/${name}`, import.meta.url).href
-}
-
 const config = useRuntimeConfig()
 
 const data: CardListViewTemplateData = {
@@ -18,7 +14,7 @@ const data: CardListViewTemplateData = {
   works: [
     {
       name: 'doc-web',
-      img: getStaticImageUrl('doc-web.png'),
+      img: 'doc-web.png',
       text: 'markdown editor. (frontend and backend)',
       platform: ['Web'],
       status: 'Private',
@@ -28,7 +24,7 @@ const data: CardListViewTemplateData = {
     },
     {
       name: 'Youtube-to-speech',
-      img: getStaticImageUrl('youtube2speech.png'),
+      img: 'youtube2speech.png',
       text: 'youtube-live comment reader. (Web speech API)',
       platform: ['Web'],
       status: 'Private',
@@ -38,7 +34,7 @@ const data: CardListViewTemplateData = {
     },
     {
       name: 'RoutineTree',
-      img: getStaticImageUrl('RoutineTree.png'),
+      img: 'RoutineTree.png',
       text: 'Task management application that helps you accomplish your daily routine tasks.',
       platform: ['iOS'],
       status: 'Released',
@@ -48,7 +44,7 @@ const data: CardListViewTemplateData = {
     },
     {
       name: 'My homepage',
-      img: getStaticImageUrl('MyHomepage.png'),
+      img: 'MyHomepage.png',
       text: 'This website.',
       platform: ['Web'],
       status: 'Released',
