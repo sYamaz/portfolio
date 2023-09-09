@@ -3,7 +3,7 @@
     <v-row no-gutters>
       <v-col cols="12" sm="12" class="d-flex justify-center" style="min-width:fit-content;">
         <v-avatar alt="sYamaz" size="84" class="my-1">
-          <img :src="prop.avatarSrc" width="84" height="84">
+          <img :src="prop.avatarSrc" width="84" height="84" alt="syamas-avatar">
         </v-avatar>
       </v-col>
       <v-col>
