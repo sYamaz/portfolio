@@ -18,24 +18,26 @@ const data = ref({
   hobbyTitle: 'Hobby',
   hobbyItems: ['Music🎵', ' Guitar🎸', 'Ramen🍜', 'Travel🛫'],
   webTitle: 'Web',
-  webLinks: [
-    {
-      icon: mdiTwitter,
-      name: 'Twitter(@ShunYamazaki5)',
-      url: 'https://twitter.com/ShunYamazaki5'
-    },
-    {
-      icon: mdiGithub,
-      name: 'GitHub(sYamaz)',
-      url: 'https://github.com/sYamaz'
-    },
-    {
-      icon: '',
-      name: 'Qiita(sYamaz)',
-      url: 'https://qiita.com/sYamaz'
-    }
-  ]
+  webLinks: []
 } as AboutTemplateData)
+
+const webLinks = [
+  {
+    icon: mdiTwitter,
+    name: 'Twitter(@ShunYamazaki5)',
+    url: 'https://twitter.com/ShunYamazaki5'
+  },
+  {
+    icon: mdiGithub,
+    name: 'GitHub(sYamaz)',
+    url: 'https://github.com/sYamaz'
+  },
+  {
+    icon: '',
+    name: 'Qiita(sYamaz)',
+    url: 'https://qiita.com/sYamaz'
+  }
+]
 
 onMounted(() => {
   fetch('bios.json').then((res) => {
@@ -49,5 +51,6 @@ onMounted(() => {
     data.value.introAvatar = json.introAvatar
     data.value.introDescription = json.introDescription
   })
+  data.value.webLinks = webLinks
 })
 </script>
