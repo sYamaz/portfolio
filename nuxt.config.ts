@@ -24,11 +24,18 @@ export default defineNuxtConfig({
   ssr: false,
   css: ['vuetify/lib/styles/main.sass'],
   build: {
-    transpile: ['vuetify']
+    transpile: ['vuetify'],
+    analyze: true
   },
   vite: {
     define: {
       'process.env.DEBUG': false
+    }
+  },
+  nitro: {
+    compressPublicAssets: {
+      gzip: true,
+      brotli: true
     }
   }
 
