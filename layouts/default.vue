@@ -12,11 +12,11 @@
       >
         {{ item.title }}
       </v-btn>
-      <v-app-bar-nav-icon @click.stop="changeTheme(isDark() ? 'light' : 'dark')">
+      <v-app-bar-nav-icon aria-label="theme-color" @click.stop="changeTheme(isDark() ? 'light' : 'dark')">
         <v-icon v-if="isDark()" icon="mdi-white-balance-sunny" />
         <v-icon v-else icon="mdi-weather-night" />
       </v-app-bar-nav-icon>
-      <v-app-bar-nav-icon :href="sourceUrl" sm>
+      <v-app-bar-nav-icon :href="sourceUrl" sm aria-label="toGithub">
         <v-icon icon="mdi-github" />
       </v-app-bar-nav-icon>
       <v-menu>
