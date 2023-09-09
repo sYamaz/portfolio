@@ -1,0 +1,20 @@
+{
+    "bioRecords": [
+        {
+            "year": "1990",
+            "summary": "Born in Tokyo, Japan. And moved to Ibaraki."
+        },
+        {
+            "year": "2013",
+            "summary": "Completed bachelor's degree in Electrical, Electronic and Computer Engineering at Tokyo University of Science."
+        },
+        {
+            "year":"2013",
+            "summary": "Work as a developer at Orientalmotor co., ltd."
+        },
+        {
+            "year":"2022",
+            "summary": "Work as a developer at Z-kai inc."
+        }
+    ]
+}

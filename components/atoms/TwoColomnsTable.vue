@@ -3,9 +3,9 @@
     <tbody>
       <tr v-for="(item, i) in prop.records" :key="i">
         <td>
-          {{ item.col1 }}
+          {{ item.year }}
         </td>
-        <td>{{ item.col2 }}</td>
+        <td>{{ item.summary }}</td>
       </tr>
     </tbody>
   </v-table>
@@ -14,8 +14,8 @@
 <script lang="ts" setup>
 
 export interface TwoColomnsRecord{
-    col1: any
-    col2: any
+    year: any
+    summary: any
 }
 
 const prop = defineProps<{records: TwoColomnsRecord[]}>()

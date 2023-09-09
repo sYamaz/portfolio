@@ -15,11 +15,5 @@ import PageHeadline from '~/components/atoms/PageHeadline.vue'
 export interface PostListTemplateData {
   posts: PostData[];
 }
-
 const prop = defineProps<{data: PostListTemplateData}>()
-
 </script>
-
-<style>
-
-</style>
