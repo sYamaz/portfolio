@@ -1,6 +1,6 @@
 <template>
   <v-app :theme="theme">
-    <v-app-bar style="backdrop-filter: blur(10px);" :color="isDark() ? '#FFFFFF00' : '#FFFFFF10'" class="d-flex justify-center">
+    <v-app-bar style="backdrop-filter: blur(10px);" :style="{backgroundColor: isDark() ? '#FFFFFF00' : '#FFFFFF10'}" class="d-flex justify-center">
       <v-app-bar-title>
         {{ title }}
       </v-app-bar-title>
@@ -13,11 +13,11 @@
         {{ item.title }}
       </v-btn>
       <v-app-bar-nav-icon aria-label="theme-color" @click.stop="changeTheme(isDark() ? 'light' : 'dark')">
-        <v-icon v-if="isDark()" icon="mdi-white-balance-sunny" />
-        <v-icon v-else icon="mdi-weather-night" />
+        <v-icon v-if="isDark()" :icon="mdiWhiteBalanceSunny" />
+        <v-icon v-else :icon="mdiWeatherNight" />
       </v-app-bar-nav-icon>
       <v-app-bar-nav-icon :href="sourceUrl" sm aria-label="toGithub">
-        <v-icon icon="mdi-github" />
+        <v-icon :icon="mdiGithub" />
       </v-app-bar-nav-icon>
       <v-menu>
         <template #activator="{props}">
@@ -45,6 +45,7 @@
   </v-app>
 </template>
 <script lang="ts" setup>
+import { mdiWhiteBalanceSunny, mdiWeatherNight, mdiGithub } from '@mdi/js'
 const title = 'Shun Yamazaki'
 const sourceUrl = 'https://github.com/sYamaz/portfolio'
 const items = [

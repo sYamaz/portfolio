@@ -2,6 +2,7 @@
   <AboutTemplate :data="data" />
 </template>
 <script lang="ts" setup>
+import { mdiTwitter, mdiGithub } from '@mdi/js'
 import AboutTemplate, {
   AboutTemplateData
 } from '~/components/templates/AboutTemplate.vue'
@@ -37,12 +38,12 @@ const data: AboutTemplateData = {
   webTitle: 'Web',
   webLinks: [
     {
-      icon: 'mdi-twitter',
+      icon: mdiTwitter,
       name: 'Twitter(@ShunYamazaki5)',
       url: 'https://twitter.com/ShunYamazaki5'
     },
     {
-      icon: 'mdi-github',
+      icon: mdiGithub,
       name: 'GitHub(sYamaz)',
       url: 'https://github.com/sYamaz'
     },

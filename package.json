@@ -12,6 +12,7 @@
     "update:articles": "python3 -B scripts/articles_generator.py static/articles.json"
   },
   "devDependencies": {
+    "@mdi/js": "^7.2.96",
     "@nuxt/eslint-config": "^0.1.1",
     "@nuxtjs/eslint-config-typescript": "^12.0.0",
     "eslint": "^8.31.0",
@@ -20,7 +21,6 @@
     "sass": "^1.57.1"
   },
   "dependencies": {
-    "@mdi/font": "^7.1.96",
     "vuetify": "^3.0.6"
   }
 }
