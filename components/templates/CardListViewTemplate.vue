@@ -16,7 +16,3 @@ export interface CardListViewTemplateData {
 
 const prop = defineProps<{data: CardListViewTemplateData}>()
 </script>
-
-<style>
-
-</style>

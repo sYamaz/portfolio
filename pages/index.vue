@@ -7,31 +7,14 @@ import AboutTemplate, {
   AboutTemplateData
 } from '~/components/templates/AboutTemplate.vue'
 
-const data: AboutTemplateData = {
+const data = ref({
   pageTitle: 'Shun Yamazaki',
   introAvatar: 'sYamaz.jpeg',
   introHeadline: 'Corporate developer',
   introDescription:
       'Shun is a developer based in Shizuoka in Japan. He is focusing on daily development and improving his skills to achieve his goal of becoming a full-stack engineer.',
   bioTitle: 'Biography',
-  bioRecords: [
-    {
-      col1: '1990',
-      col2: 'Born in Tokyo, Japan. And moved to Ibaraki.'
-    },
-    {
-      col1: '2013',
-      col2: "Completed bachelor's degree in Electrical, Electronic and Computer Engineering at Tokyo University of Science."
-    },
-    {
-      col1: '2013',
-      col2: 'Work as a developer at Orientalmotor co., ltd.'
-    },
-    {
-      col1: '2022',
-      col2: 'Work as a developer at Z-kai inc.'
-    }
-  ],
+  bioRecords: [],
   worksLink: '/works',
   hobbyTitle: 'Hobby',
   hobbyItems: ['Music🎵', ' Guitar🎸', 'Ramen🍜', 'Travel🛫'],
@@ -53,5 +36,13 @@ const data: AboutTemplateData = {
       url: 'https://qiita.com/sYamaz'
     }
   ]
-}
+} as AboutTemplateData)
+
+onMounted(() => {
+  fetch('bios.json').then((res) => {
+    return res.json()
+  }).then((json) => {
+    data.value.bioRecords = json.bioRecords
+  })
+})
 </script>
