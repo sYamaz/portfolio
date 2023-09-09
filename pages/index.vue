@@ -9,10 +9,9 @@ import AboutTemplate, {
 
 const data = ref({
   pageTitle: 'Shun Yamazaki',
-  introAvatar: 'sYamaz.jpeg',
+  introAvatar: '',
   introHeadline: 'Corporate developer',
-  introDescription:
-      'Shun is a developer based in Shizuoka in Japan. He is focusing on daily development and improving his skills to achieve his goal of becoming a full-stack engineer.',
+  introDescription: '',
   bioTitle: 'Biography',
   bioRecords: [],
   worksLink: '/works',
@@ -43,6 +42,12 @@ onMounted(() => {
     return res.json()
   }).then((json) => {
     data.value.bioRecords = json.bioRecords
+  })
+  fetch('self-intro.json').then((res) => {
+    return res.json()
+  }).then((json) => {
+    data.value.introAvatar = json.introAvatar
+    data.value.introDescription = json.introDescription
   })
 })
 </script>
