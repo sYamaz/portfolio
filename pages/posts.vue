@@ -9,13 +9,12 @@ const data = ref({
   posts: []
 } as PostListTemplateData)
 
-onMounted(() => {
-  fetch('articles.json').then((o) => {
-    return o.json()
-  }).then((json) => {
-    data.value.posts = json.articles
-  })
+fetch('articles.json').then((o) => {
+  return o.json()
+}).then((json) => {
+  data.value.posts = json.articles
 })
+
 </script>
 
 <style>
