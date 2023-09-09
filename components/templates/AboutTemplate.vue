@@ -14,7 +14,7 @@
     <v-row no-gutters>
       <v-btn class="mx-auto" :to="prop.data.worksLink">
         works
-        <v-icon>mdi-chevron-right</v-icon>
+        <v-icon>{{ mdiChevronRight }}</v-icon>
       </v-btn>
     </v-row>
     <!--Hobby-->
@@ -29,6 +29,7 @@
 </template>
 
 <script lang="ts" setup>
+import { mdiChevronRight } from '@mdi/js'
 import LinkButtonStack from '../molecules/LinkButtonStack.vue'
 import { LinkData } from '../atoms/LinkButton.vue'
 import PageHeadline from '~/components/atoms/PageHeadline.vue'
@@ -36,7 +37,6 @@ import AvatarDescriptionSection from '~/components/organisms/AvatarDescriptionSe
 import ContentSection from '~/components/organisms/ContentSection.vue'
 import TwoColomnsTable, { TwoColomnsRecord } from '~/components/atoms/TwoColomnsTable.vue'
 import JoinedText from '~/components/atoms/JoinedText.vue'
-
 export interface AboutTemplateData {
   pageTitle: string
   introAvatar: string
