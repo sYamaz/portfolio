@@ -18,16 +18,7 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'icon', type: 'image/png', href: 'favicon/32x32.png', sizes: '32x32' },
-        { rel: 'icon', type: 'image/png', href: 'favicon/48x48.png', sizes: '48x48' },
-        { rel: 'icon', type: 'image/png', href: 'favicon/72x72.png', sizes: '72x72' },
-        { rel: 'icon', type: 'image/png', href: 'favicon/96x96.png', sizes: '96x96' },
-        { rel: 'icon', type: 'image/png', href: 'favicon/128x128.png', sizes: '128x128' },
-        { rel: 'icon', type: 'image/png', href: 'favicon/144x144.png', sizes: '144x144' },
-        { rel: 'icon', type: 'image/png', href: 'favicon/152x152.png', sizes: '152x152' },
-        { rel: 'icon', type: 'image/png', href: 'favicon/192x192.png', sizes: '192x192' },
-        { rel: 'icon', type: 'image/png', href: 'favicon/256x256.png', sizes: '256x256' },
-        { rel: 'icon', type: 'image/png', href: 'favicon/384x384.png', sizes: '384x384' },
-        { rel: 'icon', type: 'image/png', href: 'favicon/512x512.png', sizes: '512x512' }
+        { rel: 'icon', type: 'image/svg+xml', href: 'favicon/favicon.svg', sizes: 'any' }
       ]
     }
   },

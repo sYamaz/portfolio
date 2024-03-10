@@ -1,0 +1,15 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+<style>
+    path {
+        stroke: #607d8b;
+        fill: transparent;
+    }
+    @media (prefers-color-scheme: dark) {
+        path {
+            stroke: #b0bec5;
+            fill: transparent
+        }
+    }
+</style>
+<path d="M 32 427 L 327 100 L 480 427 M 242 220 L 327 427" stroke-linecap="round" stroke-width="64" stroke-linejoin="round"/>
+</svg>
