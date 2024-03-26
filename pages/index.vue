@@ -4,7 +4,7 @@
 <script lang="ts" setup>
 import { mdiTwitter, mdiGithub } from '@mdi/js'
 import AboutTemplate, {
-  AboutTemplateData
+  type AboutTemplateData
 } from '~/components/templates/AboutTemplate.vue'
 
 const data = ref({

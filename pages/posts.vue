@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import PostListTemplate, { PostListTemplateData } from '~/components/templates/PostListTemplate.vue'
+import PostListTemplate, { type PostListTemplateData } from '~/components/templates/PostListTemplate.vue'
 
 const data = ref({
   posts: []

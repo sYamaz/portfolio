@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PostData } from '~/types/Qiita/Api/v2/datas'
+import type { PostData } from '~/types/Qiita/Api/v2/datas'
 import OGPCard from '~/components/molecules/OGPCard.vue'
 import PageHeadline from '~/components/atoms/PageHeadline.vue'
 

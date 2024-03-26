@@ -4,7 +4,7 @@
 
 <script lang="ts" setup>
 import CardListViewTemplate, {
-  CardListViewTemplateData
+  type CardListViewTemplateData
 } from '../components/templates/CardListViewTemplate.vue'
 
 const data = ref({
