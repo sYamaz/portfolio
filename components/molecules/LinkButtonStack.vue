@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import LinkButton, { LinkData } from '../atoms/LinkButton.vue'
+import LinkButton, { type LinkData } from '../atoms/LinkButton.vue'
 
 const prop = defineProps<{datas: LinkData[]}>()
 

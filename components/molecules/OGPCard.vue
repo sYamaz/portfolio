@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PostData } from '~/types/Qiita/Api/v2/datas'
+import type { PostData } from '~/types/Qiita/Api/v2/datas'
 import VCardLabel from '~/components/atoms/VCardLabel.vue'
 
 const prop = defineProps<{data:PostData}>()

@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts" setup>
-import WorkCard, { Work } from '~/components/organisms/WorkCard.vue'
+import WorkCard, { type Work } from '~/components/organisms/WorkCard.vue'
 import PageHeadline from '~/components/atoms/PageHeadline.vue'
 
 export interface CardListViewTemplateData {
