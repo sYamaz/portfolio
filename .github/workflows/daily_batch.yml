@@ -15,7 +15,7 @@ jobs:
       # setup local repo
       - uses: actions/checkout@v4
       - name: Restore Node modules
-        run: yarn
+        run: yarn install --frozen-lockfile
       # autogenerate articles.ts, commit, and push
       - name: Setup python modules
         run: pip3 install -r requirements.txt
@@ -31,7 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Restore Node modules
-        run: yarn
+        run: yarn install --frozen-lockfile
       # lintfix
       - name: Update .eslintignore
         run: yarn update:lintignore
@@ -50,7 +50,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Restore packages
-        run: yarn
+        run: yarn install --frozen-lockfile
       - name: Build
         run: yarn generate
       - name: Deploy (puth output/public dir to gh-pages branch)
