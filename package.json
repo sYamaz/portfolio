@@ -21,6 +21,6 @@
     "sass": "^1.72.0"
   },
   "dependencies": {
-    "vuetify": "^3.5.13"
+    "vuetify": "^3.5.15"
   }
 }
