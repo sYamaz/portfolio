@@ -22,6 +22,6 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "vuetify": "^3.5.13"
+    "vuetify": "^3.5.17"
   }
 }
