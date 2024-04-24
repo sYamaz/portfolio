@@ -18,7 +18,8 @@
     "eslint": "^8.31.0",
     "eslint-plugin-nuxt": "^4.0.0",
     "nuxt": "3.11.2",
-    "sass": "^1.72.0"
+    "sass": "^1.72.0",
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "vuetify": "^3.5.13"
