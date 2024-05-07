@@ -24,7 +24,7 @@
     "sass": "^1.76.0",
     "typescript": "^5.4.5",
     "unocss": "^0.59.4",
-    "vite": "^5.2.10"
+    "vite": "^5.2.11"
   },
   "dependencies": {
     "vue": "^3.4.26",
