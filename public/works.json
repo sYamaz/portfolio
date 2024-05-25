@@ -1,6 +1,16 @@
 {
     "works": [
         {
+            "name": "canvas-diagram",
+            "img": "canvas-diagram.gif",
+            "text": "npm package to draw diagrams and handwriting stroke",
+            "platform": ["Web"],
+            "status": "In-Progress",
+            "url": "",
+            "outerurl": "https://github.com/sYamaz/canvas-diagrams",
+            "buttonName": "Go to repo"
+        },
+        {
             "name": "doc-web",
             "img": "doc-web.png",
             "text": "markdown editor. (frontend and backend)",
