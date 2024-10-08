@@ -2246,10 +2246,10 @@
   resolved "https://registry.yarnpkg.com/@unocss/reset/-/reset-0.63.3.tgz#9502c19c847d1d912c879c8d99f5eb51289f5a64"
   integrity sha512-AByvjMrKYOMcqVQc659b3oF85B/np+wvsTRYGLHYf/ZLrBCkdKNWGHMDS3O6RuJUzYqKOzR4HiM0VJLw3BJU8Q==
 
-"@unocss/reset@^0.63.1":
-  version "0.63.1"
-  resolved "https://registry.yarnpkg.com/@unocss/reset/-/reset-0.63.1.tgz#9a80cb267330920e02fa75455b79994dba5ca0e8"
-  integrity sha512-gjSF0LeWwkNCYZ4Z/AnQXGCIOPUGL5Ll1IIDfwnKZeFGCj9QmcV1hki4xf/7N8mNHhfP0nYdJpdAfiznhKdkwQ==
+"@unocss/reset@^0.63.3":
+  version "0.63.3"
+  resolved "https://registry.yarnpkg.com/@unocss/reset/-/reset-0.63.3.tgz#9502c19c847d1d912c879c8d99f5eb51289f5a64"
+  integrity sha512-AByvjMrKYOMcqVQc659b3oF85B/np+wvsTRYGLHYf/ZLrBCkdKNWGHMDS3O6RuJUzYqKOzR4HiM0VJLw3BJU8Q==
 
 "@unocss/rule-utils@0.63.3":
   version "0.63.3"
