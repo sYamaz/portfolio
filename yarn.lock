@@ -2507,10 +2507,10 @@
   resolved "https://registry.yarnpkg.com/@unocss/reset/-/reset-65.4.2.tgz#4a2ebae148743df9a81a8cdee8eb576d3db70f16"
   integrity sha512-Sas0lTGEgzdWKafSiT+dyhhrUOkOpPbhJYbPMgjW6Ol/tB5JXhdlCNm90Xue1wt453P8O3J4v+dQcyrdRSq0Ig==
 
-"@unocss/reset@^65.4.0":
-  version "65.4.0"
-  resolved "https://registry.yarnpkg.com/@unocss/reset/-/reset-65.4.0.tgz#34d15d924a4b05930df0e49c13fb58e5174d74da"
-  integrity sha512-SHT5IKWbr1iZm1gswWJy+G0a/tnzIODZxjZGr64JStZn/uy7N9AVs5+Kmnlx2NyhW8VNApxTnAkl035jRejZPw==
+"@unocss/reset@^65.4.3":
+  version "65.4.3"
+  resolved "https://registry.yarnpkg.com/@unocss/reset/-/reset-65.4.3.tgz#3dce634c6730a1f17e9c513e10927761dd5e2973"
+  integrity sha512-f9QnMtY1yPS1HEIkeKmSwUYcp4QS6zdo9ZcIFE9PDSLOcns3v+M1lTQg8mLChxJHVl73Cf6PofWVh5tmnxV53Q==
 
 "@unocss/rule-utils@65.4.2":
   version "65.4.2"
