@@ -28,6 +28,6 @@
   },
   "dependencies": {
     "vue": "^3.5.12",
-    "vuetify": "^3.7.12"
+    "vuetify": "^3.7.14"
   }
 }
