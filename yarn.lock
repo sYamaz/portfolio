@@ -9052,10 +9052,10 @@ vue@^3.5.12, vue@^3.5.13:
     "@vue/server-renderer" "3.5.13"
     "@vue/shared" "3.5.13"
 
-vuetify@^3.8.2:
-  version "3.8.2"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.8.2.tgz#59799811a6e97154ee238981b2926b166ff14ae2"
-  integrity sha512-UJNFP4egmKJTQ3V3MKOq+7vIUKO7/Fko5G6yUsOW2Rm0VNBvAjgO6VY6EnK3DTqEKN6ugVXDEPw37NQSTGLZvw==
+vuetify@^3.8.4:
+  version "3.8.4"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.8.4.tgz#3d3316868d789407c6fb5adb26ad90a0e09b6dfc"
+  integrity sha512-hfA1eqA6vhrF5LF8Yfk0uHdNUmh8Uckxn5wREiThO82HW/9Vfreh+IpxPgEtCsAhV33KW+NVamltQCu3HczRKw==
 
 web-streams-polyfill@^3.0.3:
   version "3.3.3"
