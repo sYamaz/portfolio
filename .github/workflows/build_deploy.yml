@@ -33,15 +33,15 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Static HTML export with Nuxt
-        run: yarn run generate
+        run: yarn build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./.output/public
+          path: ./dist
 
   # Deployment job
   deploy:

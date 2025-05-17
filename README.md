@@ -1,35 +1,5 @@
-# portfolio
+# Vue 3 + TypeScript + Vite
 
-## 開発環境
+This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
-- vscode
-  - 拡張機能： Dev Containers(`ms-vscode-remote.remote-containers`)
-- docker
-
-## debug
-
-リポジトリをクローンします
-
-```sh
-git clone {url}
-```
-
-vscode上でコマンドパレットを表示します（`Cmd(ctl) + Shift + P`）し`Dev Containers: Reopen in Container`
-（またはvscodeのウィンドウ左下の><アイコンをクリックして`Reopen in Container`）
-を実行します
-
-node_modulesのインストールをします
-
-```
-yarn
-または
-yarn install
-```
-
-デバッグ実行します
-
-```
-yarn dev
-```
-
-ブラウザで`http://localhost:3000`にアクセスしてください
+Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
