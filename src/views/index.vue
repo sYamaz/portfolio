@@ -1,7 +1,7 @@
 <template>
   <section title="about me" class="about-me-section">
     <h1>about me</h1>
-    <img src="../assets/sYamaz.jpeg">
+    <img src="../assets/sYamaz.jpeg" class="rounded-full">
     <p>山﨑 駿（Shun Yamazaki）。1990年生まれ。</p>
     <p>東京理科大学理工学部卒業後、オリエンタルモーター(株)にてWindowsアプリの開発経験を経て、現在は(株)Z会にてWebサービスの開発に携わっている。</p>
     <p>主なスキルはvue, golang, aws</p>
@@ -21,7 +21,7 @@
     <div class="works-container">
       <div class="work-item" v-for="(work, i) in works" :key="i">
         <h3>{{ work.name }}</h3>
-        <img v-if="work.img !== ''" :src="work.img" class="work-image">
+        <img v-if="work.img !== ''" :src="work.img" class="work-image rounded">
         <dev v-else class="work-image" style="aspect-ratio: 16/9;">
           no image
         </dev>
@@ -74,6 +74,10 @@ const works = [
 
 </script>
 <style lang="scss" scoped>
+section {
+  margin-bottom: 72px;
+}
+
 .about-me-section > p {
   margin-left: 10%;
   margin-right: 10%;
@@ -87,12 +91,21 @@ const works = [
   .work-item {
     padding: 8px;
     .work-image {
+      box-shadow: 0px 2px 4px 0px rgba(255, 255, 255, 0.12%);
       width: 100%;
       color: white;
       background-color: #a0a0a0;
       display: block;
     }
   }
+}
+
+.rounded-full{
+  border-radius: calc(infinity * 1px);
+}
+
+.rounded {
+  border-radius: 8px;
 }
 
 @media (max-width: 639px) {
