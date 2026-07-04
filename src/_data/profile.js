@@ -1,0 +1,13 @@
+// プロフィール情報。将来 i18n を入れる際はここをロケール別に分岐させる受け皿にする。
+export default {
+  name: "Shun Yamazaki",
+  reading: "Shun Yamazaki",
+  role: "Software Engineer",
+  skills: ["vue", "golang", "aws"],
+  // About セクションの散文（段落ごとに配列で持つ）
+  bio: [
+    "1990 年生まれ。東京理科大学理工学部を卒業。",
+    "オリエンタルモーター株式会社で Windows アプリケーションの開発に携わったのち、現在は株式会社 Z 会で Web サービスの開発に取り組んでいる。",
+    "コードを書くことと、その周りの余白について考えることが好き。",
+  ],
+};

@@ -1,0 +1,55 @@
+{% extends "layout.njk" %}
+{% block content %}
+  <section class="section reveal" style="--i: 1">
+    <h2 class="eyebrow">About</h2>
+    <div class="prose">
+      {%- for para in profile.bio %}
+        <p>{{ para }}</p>
+      {%- endfor %}
+    </div>
+  </section>
+
+  <section class="section reveal" style="--i: 2">
+    <h2 class="eyebrow">Works</h2>
+    <ul class="work-index">
+      {%- for work in works %}
+        <li class="work">
+          {%- if work.url %}
+            <a class="work__head" href="{{ work.url }}" target="_blank" rel="noopener">
+              <span class="work__name">{{ work.name }}</span>
+              <span class="meta work__kind">{{ work.kind }} ↗</span>
+            </a>
+          {%- else %}
+            <div class="work__head">
+              <span class="work__name">{{ work.name }}</span>
+              <span class="meta work__kind">{{ work.kind }}</span>
+            </div>
+          {%- endif %}
+          {%- if work.img %}
+            <img
+              class="work__img"
+              src="{{ ('/assets/' + work.img) | url }}"
+              alt="{{ work.name }}"
+              loading="lazy"
+            />
+          {%- else %}
+            <div class="work__noimg">no image</div>
+          {%- endif %}
+        </li>
+      {%- endfor %}
+    </ul>
+  </section>
+
+  <section class="section reveal" style="--i: 3">
+    <h2 class="eyebrow">Elsewhere</h2>
+    <ul class="link-list">
+      {%- for link in links %}
+        <li>
+          <a href="{{ link.url }}" target="_blank" rel="noopener">
+            {{ link.name }}<span class="arrow">↗</span>
+          </a>
+        </li>
+      {%- endfor %}
+    </ul>
+  </section>
+{% endblock %}
