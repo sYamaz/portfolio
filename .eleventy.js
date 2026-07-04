@@ -8,9 +8,8 @@ export default function (eleventyConfig) {
   eleventyConfig.addGlobalData("year", () => new Date().getFullYear());
 
   return {
-    // GitHub Pages のプロジェクトページ配信（https://sYamaz.github.io/portfolio/）
-    // テンプレ内のリンク/アセットは必ず `| url` フィルタ経由にすること
-    pathPrefix: "/portfolio/",
+    // カスタムドメイン me.shunyamazaki.com のルートで配信するため pathPrefix は付けない
+    // （テンプレ内のリンク/アセットは引き続き `| url` フィルタ経由にすること）
     dir: {
       input: "src",
       includes: "_includes",
