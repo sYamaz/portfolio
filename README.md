@@ -1,6 +1,6 @@
 # portfolio
 
-Shun Yamazaki のポートフォリオサイト。[Eleventy](https://www.11ty.dev/) + 素の CSS で構築した静的サイト。
+ポートフォリオサイト。[Eleventy](https://www.11ty.dev/) + 素の CSS で構築した静的サイト。
 
 「コードと余白」をコンセプトに、完全モノクロ・全面セリフ（Noto Serif JP）・広い余白でまとめている。
 

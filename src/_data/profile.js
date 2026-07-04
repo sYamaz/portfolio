@@ -1,6 +1,5 @@
 // プロフィール情報。将来 i18n を入れる際はここをロケール別に分岐させる受け皿にする。
 export default {
-  name: "Shun Yamazaki",
   reading: "Shun Yamazaki",
   role: "Software Engineer",
   skills: ["vue", "golang", "aws"],
