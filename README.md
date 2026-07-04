@@ -1,5 +1,23 @@
-# Vue 3 + TypeScript + Vite
+# portfolio
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+山﨑 駿 のポートフォリオサイト。[Eleventy](https://www.11ty.dev/) + 素の CSS で構築した静的サイト。
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+「コードと余白」をコンセプトに、完全モノクロ・全面セリフ（Noto Serif JP）・広い余白でまとめている。
+
+## 開発
+
+```sh
+yarn install
+yarn dev     # http://localhost:8080/portfolio/
+yarn build   # _site/ に静的 HTML を出力
+```
+
+## 構成
+
+- `src/index.njk` — トップページ（About / Works / Elsewhere）
+- `src/_includes/` — レイアウトと部分テンプレート（Nunjucks）
+- `src/_data/` — コンテンツ（profile / works / links）。将来 i18n の受け皿
+- `src/styles/` — `tokens.css`（デザイントークン）/ `reset.css` / `main.css`
+- `src/assets/` — 画像
+
+GitHub Pages（`/portfolio/`）へ GitHub Actions で自動デプロイ。

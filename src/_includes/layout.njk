@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ site.title }}</title>
+    <meta name="description" content="{{ site.description }}" />
+
+    <!-- OGP -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="{{ site.title }}" />
+    <meta property="og:description" content="{{ site.description }}" />
+
+    <!-- Fonts: Noto Serif JP を実配信（monospace は system スタック） -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="{{ '/styles/reset.css' | url }}" />
+    <link rel="stylesheet" href="{{ '/styles/tokens.css' | url }}" />
+    <link rel="stylesheet" href="{{ '/styles/main.css' | url }}" />
+    <link rel="icon" type="image/x-icon" href="{{ '/favicon.ico' | url }}" />
+  </head>
+  <body>
+    <div class="page">
+      {% include "site-header.njk" %}
+      <main>
+        {% block content %}{% endblock %}
+      </main>
+      {% include "site-footer.njk" %}
+    </div>
+  </body>
+</html>
