@@ -1,0 +1,14 @@
+<header class="site-header reveal" style="--i: 0">
+  <img
+    class="avatar"
+    src="{{ '/assets/avatar.png' | url }}"
+    width="64"
+    height="64"
+    alt="{{ profile.reading }}"
+  />
+  <h1 class="site-name">{{ profile.reading }}</h1>
+  <p class="site-tagline">
+    <span>{{ profile.role }}</span>
+    <span class="meta">{{ profile.skills | join(" / ") }}</span>
+  </p>
+</header>
