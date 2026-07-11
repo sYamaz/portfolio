@@ -4,6 +4,12 @@
 // img:  src/assets/ 配下のファイル名（空文字なら no image プレースホルダ）
 export default [
   {
+    name: "enpitsu",
+    kind: "web",
+    url: "https://github.com/sYamaz/enpitsu",
+    img: "enpitsu.png",
+  },
+  {
     name: "taberun",
     kind: "web",
     url: "",
